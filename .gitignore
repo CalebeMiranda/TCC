@@ -1,0 +1,14 @@
+# Ignora tudo por padrão
+*
+
+# Permite apenas estes arquivos na raiz
+!Monografia.tex
+!dados.tex
+!MinhaBiblioteca.bib
+
+# Permite a pasta Imagens e todo seu conteúdo
+!Imagens/
+
+# Re-ignorar quaisquer arquivos temporários ocultos dentro de Imagens (opcional)
+Imagens/**/.DS_Store
+Imagens/**/Thumbs.db

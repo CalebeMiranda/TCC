@@ -1,0 +1,49 @@
+\changetocdepth {4}
+\babel@toc {brazil}{}\relax 
+\babel@toc {brazil}{}\relax 
+\setlength {\cftchapterindent }{\cftlastnumwidth } \setlength {\cftchapternumwidth }{2em}
+\setlength {\cftchapterindent }{\cftlastnumwidth } \setlength {\cftchapternumwidth }{2em}
+\setlength {\cftchapterindent }{\cftlastnumwidth } \setlength {\cftchapternumwidth }{2em}
+\setlength {\cftchapterindent }{\cftlastnumwidth } \setlength {\cftchapternumwidth }{2em}
+\contentsline {chapter}{Introdução}{6}{chapter*.8}%
+\setlength {\cftchapterindent }{0em} \setlength {\cftchapternumwidth }{\cftlastnumwidth }
+\contentsline {chapter}{\chapternumberline {1}\MakeTextUppercase []{Referencial Teórico}}{10}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Compilador}{10}{section.1.1}%
+\contentsline {subsection}{\numberline {1.1.1}\textit {Front-end}}{11}{subsection.1.1.1}%
+\contentsline {subsection}{\numberline {1.1.2}Análise Léxica}{12}{subsection.1.1.2}%
+\contentsline {subsection}{\numberline {1.1.3}Análise Sintática}{12}{subsection.1.1.3}%
+\contentsline {subsection}{\numberline {1.1.4}Análise Semântica}{13}{subsection.1.1.4}%
+\contentsline {subsection}{\numberline {1.1.5}Geração de código intermediário}{14}{subsection.1.1.5}%
+\contentsline {subsection}{\numberline {1.1.6}\textit {Middle-end}}{15}{subsection.1.1.6}%
+\contentsline {subsection}{\numberline {1.1.7}\textit {Back-end}}{17}{subsection.1.1.7}%
+\contentsline {section}{\numberline {1.2}Microcontroladores}{17}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}\textit {Domain Specific Languages}(DSL)}{18}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}Robotics Language}{19}{subsection.1.2.2}%
+\contentsline {section}{\numberline {1.3}Inteligência Artificial}{19}{section.1.3}%
+\contentsline {subsection}{\numberline {1.3.1}\textit {Machine Learning}}{20}{subsection.1.3.1}%
+\contentsline {subsection}{\numberline {1.3.2}Aprendizado Supervisionado}{21}{subsection.1.3.2}%
+\contentsline {subsection}{\numberline {1.3.3}\textit {Large Language Models (LLM)}}{23}{subsection.1.3.3}%
+\contentsline {section}{\numberline {1.4}Otimização em Compiladores Modernos}{23}{section.1.4}%
+\setlength {\cftchapterindent }{0em} \setlength {\cftchapternumwidth }{\cftlastnumwidth }
+\contentsline {chapter}{\chapternumberline {2}\MakeTextUppercase []{Trabalhos Relacionados}}{25}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Introdução}{25}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Metodologia de Análise}{25}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Trabalhos analisados}{25}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}LLM-COMPILER}{25}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Good Optimization Sequences Covering Program Space}{25}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}Optimization Sequences for Code-Size Reduction}{25}{subsection.2.3.3}%
+\setlength {\cftchapterindent }{0em} \setlength {\cftchapternumwidth }{\cftlastnumwidth }
+\contentsline {chapter}{\chapternumberline {3}\MakeTextUppercase []{Metodologia}}{26}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Classificação da Pesquisa}{26}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Abordagem Geral}{26}{section.3.2}%
+\contentsline {section}{\numberline {3.3}\textit {Dataset} (Conjunto de dados)}{26}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Conversor C para Rob: \texttt {c2rob}}{27}{section.3.4}%
+\contentsline {section}{\numberline {3.5}Conjunto de pares prompt e label}{28}{section.3.5}%
+\contentsline {section}{\numberline {3.6}Treinamento}{28}{section.3.6}%
+\contentsline {section}{\numberline {3.7}Inferência e Análise Comparativa}{29}{section.3.7}%
+\setlength {\cftchapterindent }{0em} \setlength {\cftchapternumwidth }{\cftlastnumwidth }
+\contentsline {chapter}{\chapternumberline {4}\MakeTextUppercase []{Cronograma}}{30}{chapter.4}%
+\vspace {\cftbeforechapterskip }
+\vspace {\cftbeforechapterskip }
+\setlength {\cftchapterindent }{\cftlastnumwidth } \setlength {\cftchapternumwidth }{2em}
+\contentsline {chapter}{\MakeTextUppercase []{Refer\^encias}}{31}{section*.19}%

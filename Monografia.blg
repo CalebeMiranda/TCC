@@ -1,0 +1,74 @@
+This is BibTeX, Version 0.99d
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: Monografia.aux
+Reallocating 'name_of_file' (item size: 1) to 36 items.
+A level-1 auxiliary file: abntex2-modelo-include-comandos.aux
+Reallocating 'name_of_file' (item size: 1) to 16 items.
+Reallocating 'name_of_file' (item size: 1) to 16 items.
+Reallocating 'name_of_file' (item size: 1) to 12 items.
+The style file: abntex2-alf.bst
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'wiz_functions' (item size: 4) to 6000 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'wiz_functions' (item size: 4) to 9000 items.
+Database file #1: abntex2-options.bib
+Database file #2: MinhaBiblioteca.bib
+Warning--entry type for "Intel_i9_10900K_Specs" isn't style-file defined
+--line 513 of file MinhaBiblioteca.bib
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'glb_str_end' (item size: 4) to 20 items.
+Reallocating 'glb_str_ptr' (item size: 4) to 20 items.
+Reallocating 'global_strs' (item size: 1) to 4000000 items.
+Warning--campo year vazio ou faltando em Intel_i9_10900K_Specs
++---------------------------------------------------------+
+| Estilo bibliográfico abntex2-alf.bst versão v-1.9.7           |
+| Em caso de dúvidas ou problemas com este estilo procure |
+| http://www.abntex.net.br/                               |
++---------------------------------------------------------+
+You've used 29 entries,
+            6714 wiz_defined-function locations,
+            1369 strings with 15203 characters,
+and the built_in function-call counts, 31222 in all, are:
+= -- 3043
+> -- 934
+< -- 422
++ -- 784
+- -- 280
+* -- 2156
+:= -- 4061
+add.period$ -- 112
+call.type$ -- 29
+change.case$ -- 322
+chr.to.int$ -- 53
+cite$ -- 29
+duplicate$ -- 2260
+empty$ -- 1722
+format.name$ -- 1356
+if$ -- 6819
+int.to.chr$ -- 0
+int.to.str$ -- 0
+missing$ -- 516
+newline$ -- 144
+num.names$ -- 140
+pop$ -- 692
+preamble$ -- 1
+purify$ -- 121
+quote$ -- 0
+skip$ -- 2407
+stack$ -- 1
+substring$ -- 1232
+swap$ -- 893
+text.length$ -- 31
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 2
+warning$ -- 1
+while$ -- 208
+width$ -- 0
+write$ -- 451
+(There were 2 warnings)

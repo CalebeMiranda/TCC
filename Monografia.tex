@@ -1038,24 +1038,23 @@ A base utilizada nesta etapa foi o conjunto de sequências de otimização conhe
 disponibilizado pelos autores em seu repositório oficial. Trata-se de um conjunto pré-computado de sequências particularmente 
 eficazes para redução de tamanho de código no LLVM, servindo como uma alternativa robusta às estratégias tradicionais, 
 como a \texttt{-Oz}. Contudo, essas sequências foram originalmente elaboradas para a versão LLVM-10, enquanto esta pesquisa 
-adotou a versão mais recente, LLVM-20.
+adotou a versão mais recente, LLVM-20. 
 
 Durante os testes iniciais observou-se que apenas cerca de 30\% das sequências podiam ser aplicadas diretamente no LLVM-20. As 
-demais falhavam devido a modificações internas do compilador: mudanças de nomenclatura, fusão de passes, remoção de passes 
-obsoletos ou reestruturação de pipelines. Para contornar esse problema, realizou-se uma conversão manual e sistemática dos passes, 
+demais falhavam devido a modificações internas do compilador e no ambiente LLVM. Para contornar esse problema, realizou-se uma conversão manual dos passes, 
 mapeando os equivalentes entre as versões 10 e 20 do LLVM. Após esse trabalho de ajuste, tornou-se possível recuperar 100\% da lista 
 original, composta por \textbf{1289 sequências únicas}, agora compatíveis com a infraestrutura moderna do LLVM-20.
 
 Com a lista completa e compatível, foi construído um processo de compilação exaustiva utilizando o script \texttt{rodar\_seq\_uniq\_AVR.sh}. 
 Esse script recebe como entrada o arquivo \texttt{sequencias\_unicas.txt}, contendo todas as 1289 sequências convertidas, e executa o 
-seguinte procedimento para cada uma delas:
+seguinte procedimento para cada arquivo IR:
 
 \begin{enumerate}
-    \item aplicação dos passes selecionados ao arquivo LLVM-IR do código de entrada;
-    \item compilação para assembly AVR;
-    \item geração do arquivo objeto correspondente;
-    \item extração das métricas de interesse (tamanho do binário, número de instruções, bytes gerados e compilabilidade);
-    \item armazenamento dos artefatos referentes à melhor sequência parcial (arquivos \texttt{.s}, \texttt{.o} e \texttt{.ll}).
+    \item Aplicação dos passes selecionados ao arquivo LLVM-IR do código de entrada;
+    \item Compilação para assembly AVR;
+    \item Geração do arquivo objeto correspondente;
+    \item Extração e armazenamento do DEC (tamanho em bytes do código objeto);
+    \item Armazenamento dos artefatos referentes à melhor sequência parcial (arquivos \texttt{.s}, \texttt{.o} e \texttt{.ll}).
 \end{enumerate}
 
 Ao término da execução do script para cada código, é gerado um arquivo \texttt{melhor.txt} contendo a sequência ótima 
@@ -1063,8 +1062,8 @@ responsável pelo menor tamanho de código objeto produzido.
 
 Como o volume de códigos do dataset é significativo, a execução completa do processo em modo sequencial seria impraticável. Para 
 lidar com essa limitação, desenvolveu-se o script \texttt{parallel-run.py}, responsável por paralelizar a execução 
-do \texttt{rodar\_seq\_uniq\_AVR.sh} utilizando oito \textit{threads} da CPU. Esse mecanismo distribui simultaneamente diferentes 
-códigos entre os núcleos disponíveis, reduzindo o tempo total de execução e aumentando substancialmente a eficiência.
+do \texttt{rodar\_seq\_uniq\_AVR.sh} utilizando nove \textit{threads} da CPU. Esse mecanismo distribui simultaneamente diferentes 
+códigos entre os núcleos disponíveis, reduzindo o tempo total de execução.
 
 Por fim, empregou-se o script \texttt{coleta\_melhores.py} para consolidar os resultados. Esse script percorre todas as pastas geradas 
 durante a fase de otimização e extrai o arquivo \texttt{melhor.txt} de cada código analisado, compilando todos esses resultados em um 
@@ -1103,24 +1102,23 @@ LLM-Compiler, sendo estruturado da seguinte forma:
 \textit{``Run the following passes <lista\_de\_passes> to reduce the object file size to <tamanho\_em\_bytes>.''}
 \end{quote}
 
-Após essa mensagem inicial, inclui-se o código assembly gerado a partir da aplicação da sequência ótima de passes. O \textit{label} 
-agrega, portanto, tanto a justificativa textual quanto o resultado concreto da aplicação dos passes, replicando a estrutura esperada pelo
+Após essa mensagem inicial, inclui-se o código assembly gerado a partir da aplicação da sequência ótima de passes. O \textit{label} engloba,
+tanto a justificativa textual quanto o resultado concreto da aplicação dos passes, replicando a estrutura esperada pelo
 treinamento do modelo original.
 
 A geração automática desses pares foi realizada por meio do script \texttt{promptLabel.py}, disponível no repositório público do 
 pipeline (\url{https://github.com/Alisson-Teles/Pipeline-training/blob/main/AVR/PROMPT_LABEL/promptLavel.py}). O script percorre 
 todos os diretórios contendo os arquivos LLVM-IR, as sequências ótimas (\texttt{melhor.txt}) e os arquivos de assembly otimizados, 
-combinando essas informações e produzindo um arquivo final no formato \texttt{JSONL}. Cada linha do arquivo representa um par 
-independente, contendo os campos:
+combinando essas informações e produzindo um arquivo final no formato \texttt{JSONL}. Cada linha do arquivo está mapeada por uma coluna "messages", seguido 
+de "content", assim como esperado pelo serviço de \textit{autotrain} do \textit{hugging face}, e a linha representa um par de dados, contendo os campos:
 
 \begin{itemize}
     \item \texttt{"prompt"}: instrução textual seguida do LLVM-IR não otimizado;
     \item \texttt{"label"}: sequência ótima de passes, redução de tamanho e assembly correspondente;
-    \item \texttt{"meta"}: metadados relevantes (ID do código, origem, tamanho original e otimizado, número da sequência, etc.).
 \end{itemize}
 
 Esse procedimento resulta em um dataset estruturado, padronizado e diretamente compatível com a etapa de \textit{fine-tuning} do modelo 
-LLM-Compiler, garantindo consistência com a metodologia experimental original e adequação ao domínio específico da arquitetura AVR.
+LLM-Compiler, garantindo consistência com a metodologia original e adequação ao domínio específico da arquitetura AVR.
 
 \section{Configuração de treinamento do modelo}
 
@@ -1187,12 +1185,31 @@ originalmente escritos em C, gerados por Csmith e coletados no AnghaBench, conve
 sequências de passes e avaliados quanto ao tamanho do objeto gerado para a plataforma AVR.
 
 A seleção das melhores sequências para cada programa foi realizada utilizando a lista de sequências derivada do trabalho de 
-Faustino et al. (denominada aqui \textit{Optimization Cache}) em conjunto com a comparação contra flags tradicionais do LLVM 
+\cite{faustino2021new}, denominada de \textit{Optimization Cache} em conjunto com a comparação contra flags tradicionais do LLVM 
 (\texttt{-Oz}, \texttt{-Os}, \texttt{-O1}, \texttt{-O2}, \texttt{-O3}). Essa etapa foi automatizada pelos scripts desenvolvidos no 
 repositório do pipeline (por exemplo, \texttt{rodar\_seq\_uniq\_AVR.sh}, \texttt{parallel-run.py} e \texttt{coleta\_melhores.py}), 
 que percorrem o conjunto de 1.289 sequências únicas consideradas e registram, para cada programa, a sequência que produz o menor tamanho 
 de objeto e o respectivo \texttt{.s} / \texttt{.o} / \texttt{.ll} resultante. A comparação detalhada entre as sequências do Faustino e as 
-flags padrão encontra-se documentada no anexo com a tabela de comparação (ver arquivo de suporte). :contentReference[oaicite:0]{index=0}
+flags padrão encontra-se documentada na planilha \textit{Comparação Otimização Faustino vs Padrão} disponível no link: \href{https://github.com/Alisson-Teles/Pipeline-training/blob/main/AVR/Compara%C3%A7%C3%A3o%20Otimiza%C3%A7%C3%A3o%20Faustino%20vs%20Padr%C3%A3o%20-%20P%C3%A1gina1.pdf
+}{do repositório}.
+
+Dessa forma, os resultados práticos deste trabalho incluem os scripts: 
+\begin{itemize}
+    \item O script \textit{rodar_seq_uniq_AVR.sh} responsável por aplicar, para cada programa em LLVM-IR, todas as 1289 sequências de otimização únicas derivadas do trabalho de \cite{faustino2021new}. Compilando o código para AVR para cada sequência, armazenando os arquivos resultantes (.s, .o, .ll) e registrando, para cada programa, aquela sequência que produz o menor tamanho de objeto, definindo assim o “melhor caso”.
+    \item O script \textit{parallel-run.py} que atua paralelizando a execução do \textit{rodar_seq_uniq_AVR.sh} em múltiplos núcleos da CPU, permitindo processar simultaneamente diversos códigos. Reduzindo drasticamente o tempo total de execução.
+    \item O script \textit{coleta_melhores.py} que percorre todas as subpastas de resultados produzidas pelas compilações e extrai, para cada programa, o arquivo objeto melhor.o e seu tamanho em bytes. Esses valores são consolidados em um arquivo único \textit{melhores.csv}, organizado como uma tabela contendo o nome do programa e o tamanho pós otimização.
+    \item O script \textit{promptLavel.py} que realiza a montagem dos pares de treinamento. Carregando tanto o IR não otimizado quanto o assembly otimizado, além da sequência de passes ótima e do tamanho final do objeto, e organiza essas informações no formato JSONL adotado pelo LLM-Compiler.
+\end{itemize}
+
+Além dos scripts, este trabalho também contribuiu com dados prontos para consumo, que é o caso dos arquivos:
+\begin{itemize}
+    \item \textbf{\texttt{dec\_otimizacoes\_GLOBAL.csv}}, contendo o registro global dos resultados das compilações realizadas pelas flags padrões. Esse arquivo sintetiza, para cada programa e para cada flag, o tamanho do objeto gerado e permite validação e comparação de desempenho entre diferentes tecnicas de otimização.
+    \item \textbf{\texttt{melhores.csv}}, que consolida somente as melhores sequências descobertas para cada programa após a execução da metodologia exaustiva. Esse arquivo é fundamental para a etapa de construção dos pares \textit{prompt}/\textit{label}, pois fornece a sequência de passes selecionada como rótulo supervisionado do modelo.
+    \item \textbf{\texttt{pairs.jsonl}}, que contém o dataset final que poderá ser utilizado no treinamento supervisionado. Cada linha contém um objeto JSON estruturado com o \textit{prompt} (texto inicial + código LLVM-IR não otimizado) e o \textit{label} (sequência ótima de passes + assembly otimizado). Esse arquivo segue o formato recomendado para pipelines do Hugging Face e serve como dataset de refinamento do LLM-COMPILER para AVR.
+    \item \textbf{\texttt{requirements.txt}}, que especifica o ambiente mínimo necessário para executar os scripts do pipeline e manipular os dados gerados, garantindo reprodutibilidade e facilitando a replicação do experimento em outras máquinas ou em ambientes.
+\end{itemize}
+
+Adicionalmente
 
 Com o conjunto final de pares pronto e a infraestrutura de treinamento configurada (ambiente no Hugging Face, 
 espaço \texttt{Cal-mfbc5446/STF-PFC2} e parâmetros de treinamento registrados), foram conduzidos testes exploratórios de 
@@ -1224,54 +1241,47 @@ partida para a construção de pares de treinamento e é disponibilizada como ma
 % ----------------------------------------------------------
 \chapter{Discussão}
 
-Este estudo foi realizado sob restrições de tempo e de orçamento computacional que influenciaram diretamente o escopo experimental. 
-A etapa de geração de dados — em particular a execução de compilações repetidas dos mesmos programas sobre um grande conjunto de 
-sequências de passes — é intrinsecamente dispendiosa em termos de CPU e armazenamento. Em função dessas limitações, optou-se por 
-restringir o autotuning a uma lista predefinida de sequências (a \textit{Optimization Cache} derivada de Faustino et al.) e por 
-processar um subconjunto controlado de programas, priorizando a completude e a reprodutibilidade do pipeline (da geração à produção 
+Durante o desenvolvimento deste trabalho, observou-se uma série de limitações que impactaram diretamente o escopo e os resultados alcançados.
+Os principais desafios enfrentados foram decorrentes de restrições de tempo, orçamento e gastos computacionais. Estes problemas acarretaram em uma 
+série de mudanças no planejamento inicial, que influenciaram diretamente o escopo deste trabalho. Diversas mudanças foram aplicadas no decorrer desta pesquisa,
+a mais significativa delas foi que o refinamento, e consequentemente a inferência e validação, do modelo LLM-Compiler para AVR não poderia ser concluído dentro do prazo estipulado. 
+Desta forma, a contribuição principal deste trabalho é o desenvolviemnto prático e teórico de um pipeline capaz de fornecer toda a base necessária para o refinamento futuro do modelo.
+
+Outros problemas relevantes que causaram uma mudança no escopo deste projeto foi o custo computacional associado à execução do pipeline completo,
+em especial a etapa de autotuning. A execução do método completo, de elaborado por \cite{faustino2021new} demandaria tempo e adicionaria complexidade 
+a um projeto já limitado por prazos e recursos. Em função dessas limitações, optou-se por restringir o autotuning a uma lista predefinida de sequências 
+a \textit{Optimization Cache} derivada de \cite{faustino2021new} e por processar um subconjunto controlado de programas priorizando a reprodutibilidade do pipeline, (da geração à produção 
 dos pares \textit{prompt}/\textit{label}) em detrimento da exploração exaustiva do espaço combinatório de passes.
 
-Como consequência direta desse projeto de compromisso, o conjunto final empregado nas etapas de preparação do treinamento ficou reduzido 
-para aproximadamente \textbf{1\,000 pares} \textit{prompt}/\textit{label} voltados ao domínio AVR (especificamente ATmega328P). Esse volume 
-é significativamente inferior às ordens de grandeza empregadas em trabalhos correlatos que treinam modelos fundacionais para otimização de 
-compiladores. A escala limitada reduz a capacidade de generalização do modelo refinado: é razoável esperar desempenho aceitável em programas 
-similares aos observados no treinamento, mas queda acentuada quando confrontado com códigos estruturalmente distintos, maiores ou que 
-explorem construções de linguagem não contempladas nas amostras usadas.
-
 Outra limitação relevante refere-se ao tamanho dos exemplos em termos de tokens e à janela de contexto disponível para o fine-tuning. Em 
-razão da GPU utilizada (Nvidia A10G alugada via Hugging Face), o parâmetro \texttt{model\_max\_length} foi ajustado para 8\,192 tokens. 
+razão da GPU utilizada (Nvidia A10G alugada via Hugging Face), o parâmetro \texttt{model\_max\_length} foi ajustado para 8192 tokens. 
 Vários exemplos gerados pelo pipeline excederam esse limite, exigindo truncamento para viabilizar o treinamento. O truncamento potencialmente 
-remove contexto semântico importante para a escolha adequada de passes, prejudicando a qualidade do aprendizado. Optou-se, no entanto, por 
-preservar os prompts completos no repositório, visando a compatibilidade com infraestruturas futuras que permitam janelas de contexto maiores.
+remove contexto semântico importante para a escolha adequada de passes, prejudicando a qualidade do aprendizado. Porém, foi escolhido 
+preservar os prompts completos no repositório, pensando em infraestruturas futuras que permitam janelas de contexto maiores.
 
-Os testes e a análise comparativa realizados indicam um comportamento relevante da \textit{Optimization Cache} no domínio AVR. Conforme 
-sumarizado no gráfico de comparação (pizza) incluído nos materiais de apoio, verifica-se que, para a amostra testada, as sequências 
-derivadas de Faustino et al. produzem binários menores do que a flag padrão \texttt{-Oz} em \textbf{92,6\%} dos casos, enquanto em 
-\textbf{7,4\%} os resultados foram equivalentes. Essa distribuição sugere que, dentro do subconjunto de programas analisados, as sequências 
-especializadas são amplamente competitivas frente às flags tradicionais e, em boa parte dos exemplos, dominam a configuração padrão do 
-compilador para redução de tamanho. Tal constatação reforça a utilidade prática de partir de um conjunto de sequências pré-computadas como 
-ponto de partida para a construção de datasets de treinamento.
+Outros problemas técnicos superados, foi a conversão e mapeamento manual dos passes da lista \textit{Optimization Cache}, 
+originalmente definidos para LLVM-10, para torná-los utilizáveis no LLVM-20. Essa etapa de adaptação introduziu um esforço adicional para garantir que 
+todas as sequências pudessem ser aplicadas corretamente, evitando falhas de compilação e garantindo a integridade do processo de autotuning.
 
-Entretanto, essa mesma observação aponta também para uma ameaça à validade externa dos experimentos: o conjunto de exemplos processados 
-tende a privilegiar programas curtos e com padrões para os quais as sequências da \textit{Optimization Cache} já são eficazes (por exemplo, 
-muitos programas gerados por Csmith ou amostras curtas de AnghaBench). Dessa forma, os ganhos observados podem não se replicar em cenários 
-mais realistas ou complexos — códigos multi-módulo, projetos que dependem fortemente de bibliotecas externas, ou aplicações embarcadas que 
-fazem uso intensivo de periféricos e padrões de I/O. Em tais cenários, é plausível que a eficácia relativa das sequências especializadas 
-decaia, exigindo buscas mais profundas e datasets mais variados.
+%Como consequência direta desse projeto de compromisso, o conjunto final empregado nas etapas de preparação do treinamento ficou reduzido 
+%para aproximadamente \textbf{1\,000 pares} \textit{prompt}/\textit{label} voltados ao domínio AVR (especificamente ATmega328P). Esse volume 
+%é significativamente inferior às ordens de grandeza empregadas em trabalhos correlatos que treinam modelos fundacionais para otimização de 
+%compiladores. A escala limitada reduz a capacidade de generalização do modelo refinado: é razoável esperar desempenho aceitável em programas 
+%similares aos observados no treinamento, mas queda acentuada quando confrontado com códigos estruturalmente distintos, maiores ou que 
+%explorem construções de linguagem não contempladas nas amostras usadas.
 
-Outras limitações técnicas relevantes devem ser destacadas. Durante o trabalho foi necessário converter e mapear manualmente passes 
-originalmente definidos para LLVM~10 para torná-los utilizáveis no LLVM~20; essa etapa de adaptação introduz um espaço adicional de erros e 
-incertezas que pode afetar a fidelidade das sequências aplicadas. Além disso, o mapeamento entre domínios (por exemplo, modelos afinados 
-para STM32 aplicados ao AVR) mostrou-se pouco direto: diferenças de ABI, conjunto de instruções, e restrições de memória limitam a 
-transferência inter-plataforma sem reformulação do dataset e reavaliação dos critérios de qualidade.
+%Os testes e a análise comparativa realizados indicam um comportamento relevante da \textit{Optimization Cache} no domínio AVR. Conforme 
+%sumarizado no gráfico de comparação (pizza) incluído nos materiais de apoio, verifica-se que, para a amostra testada, as sequências 
+%derivadas de Faustino et al. produzem binários menores do que a flag padrão \texttt{-Oz} em \textbf{92,6\%} dos casos, enquanto em 
+%\textbf{7,4\%} os resultados foram equivalentes. Essa distribuição sugere que, dentro do subconjunto de programas analisados, as sequências 
+%especializadas são amplamente competitivas frente às flags tradicionais e, em boa parte dos exemplos, dominam a configuração padrão do 
+%compilador para redução de tamanho. Tal constatação reforça a utilidade prática de partir de um conjunto de sequências pré-computadas como 
+%ponto de partida para a construção de datasets de treinamento.
 
 Por fim, apesar das limitações supracitadas, o principal mérito prático do trabalho é a entrega de um pipeline reprodutível e público 
 que cobre toda a cadeia de experimentação (geração de código, conversão para ROBL, aplicação e avaliação de 1\,289 sequências únicas, 
-coleta das melhores sequências e montagem dos pares \textit{prompt}/\textit{label}). Esse artefato constitui uma base sólida para 
-investigações futuras: recomenda-se, como próximos passos, a expansão do conjunto de dados com programas mais variados e de maior porte, a 
-execução de buscas mais profundas (quando o orçamento computacional permitir), a automatização e validação sistemática do mapeamento de passes entre versões do LLVM, e a 
-realização de treinamento em infraestruturas que suportem janelas de contexto maiores. Somente com essas ampliações será possível avaliar 
-de forma definitiva se a estratégia de fine-tuning conduz a ganhos robustos e generalizáveis no domínio de microcontroladores AVR.
+coleta das melhores sequências, montagem dos pares \textit{prompt}/\textit{label} e configuração de um ambiente e parâmetros de refinamento de IA),
+necessários para o fine-tunning futuro do LLM-Compiler no domínio AVR. 
 
 % ----------------------------------------------------------
 %   Conclusão

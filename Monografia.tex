@@ -226,26 +226,26 @@ Muito Obrigado !
 \vspace{0.5cm}
 % Texto centralizado horizontalmente, com largura limitada
 
-As bibliotecas padrão são um conjunto de bibliotecas predefinidas que acompanham a
-maioria das linguagens de programação, fornecendo funcionalidades essenciais para facilitar
-o desenvolvimento de software. Elas oferecem implementações de funções e rotinas que
-atendem a necessidades comuns, evitando que os desenvolvedores precisem reescrever código
-básico e complexo, o que aumenta a produtividade e a confiabilidade dos programas. Dentro
-das bibliotecas padrão, uma das mais utilizadas é a biblioteca matemática, que contém
-funções essenciais para realizar cálculos, além de oferecer operações como trigonometria,
-exponenciação, logaritmos, entre outras, frequentemente utilizadas em diversas áreas
-da ciência. Neste trabalho, investigam-se alternativas para a implementação de funções
-matemáticas na Robotics Language, desenvolvida na Universidade Federal de Jataí. Foram
-implementadas e avaliadas seis funções matemáticas: seno, cosseno, tangente, exponencial,
-logaritmo e raiz quadrada, utilizando algoritmos alternativos, como o CORDIC para as
-operações trigonométricas. Avaliou-se o tempo de execução e o tamanho do programa objeto
-para as plataformas AVR e STM32. Os resultados iniciais indicaram que os algoritmos
-são funcionalmente adequados e precisos, mas não competitivos em termos de tempo
-de execução e tamanho do programa objeto gerado, considerando o estágio atual de
-desenvolvimento do Robcmp e dos backends AVR e ARM do LLVM.
+Nos últimos anos, avanços em modelos de linguagem de grande escala (LLMs) tornaram possível aplicar técnicas de 
+inteligência artificial a tarefas antes exclusivas de mãos humanas, incluindo a geração e transformação de código. 
+Trabalhos recentes, em especial o modelo LLM-Compiler, demonstraram que LLMs treinados sobre representações 
+intermediárias de compiladores são capazes de sugerir sequências de passes de otimização e, em alguns casos, 
+gerar código otimizado, tornando o processo de compilação mais inteligente. Entretanto, esses esforços foram majoritariamente dirigidos a 
+arquiteturas de propósito geral, incompatíveis com microcontroladores usados em sistemas embarcados, que devido a restrições severas de recursos
+se beneficiariam muito desta nova tecnologia. Diante dessa lacuna, este trabalho propõe e implementa um pipeline reprodutível 
+dedicado a preparar o material necessário para o refinamento supervisionado do LLM-Compiler para o domínio AVR (com foco no ATmega328P), 
+permitindo adaptar a capacidade dos LLMs às limitações e particularidades de MCUs. O pipeline integra as etapas de geração e 
+coleta de programas em C (códigos sintéticos e reais), conversão automática para a Robotics Language (ROBL) 
+via software \texttt{c2rob}, compilação para LLVM-IR direcionada ao backend AVR, execução de uma busca controlada sobre um conjunto convertido de 
+1.289 sequências de otimização e geração automática de pares \textit{prompt}/\textit{label} no formato adequado para 
+\textit{Supervised Fine-Tuning}. Como artefatos, o trabalho entrega scripts automatizados, dados consolidados (pares JSONL e tabelas de 
+melhores sequências) e documentação que viabilizam a execução posterior do fine-tuning em infraestruturas apropriadas.
+Em termos de contribuição, o principal resultado é a disponibilização de um ecossistema preparado para futuras pesquisas sobre otimização de código para microcontroladores. 
+O conjunto de ferramentas e datasets produzidos permite avaliar e comparar estratégias de otimização específicas ao domínio AVR, além de servir como base para experimentos de fine-tuning 
+que visem melhorar a geração de sequências de passes em sistemas embarcados.
 \vspace{0.5cm}
 
-\textbf{Palavras-chaves:} Linguagem de programação; CORDIC; Bibliotecas padrão; Robcmp.
+\textbf{Palavras-chaves:} LLM; otimização de compiladores; LLVM-IR; microcontroladores AVR; pipeline; fine-tuning.
 \clearpage
 
 
@@ -258,28 +258,25 @@ desenvolvimento do Robcmp e dos backends AVR e ARM do LLVM.
     {\Large \textbf{Abstract}}
 \end{center}
 \vspace{0.5cm}
-% Texto centralizado horizontalmente, com largura limitada
-
-As bibliotecas padrão são um conjunto de bibliotecas predefinidas que acompanham a
-maioria das linguagens de programação, fornecendo funcionalidades essenciais para facilitar
-o desenvolvimento de software. Elas oferecem implementações de funções e rotinas que
-atendem a necessidades comuns, evitando que os desenvolvedores precisem reescrever código
-básico e complexo, o que aumenta a produtividade e a confiabilidade dos programas. Dentro
-das bibliotecas padrão, uma das mais utilizadas é a biblioteca matemática, que contém
-funções essenciais para realizar cálculos, além de oferecer operações como trigonometria,
-exponenciação, logaritmos, entre outras, frequentemente utilizadas em diversas áreas
-da ciência. Neste trabalho, investigam-se alternativas para a implementação de funções
-matemáticas na Robotics Language, desenvolvida na Universidade Federal de Jataí. Foram
-implementadas e avaliadas seis funções matemáticas: seno, cosseno, tangente, exponencial,
-logaritmo e raiz quadrada, utilizando algoritmos alternativos, como o CORDIC para as
-operações trigonométricas. Avaliou-se o tempo de execução e o tamanho do programa objeto
-para as plataformas AVR e STM32. Os resultados iniciais indicaram que os algoritmos
-são funcionalmente adequados e precisos, mas não competitivos em termos de tempo
-de execução e tamanho do programa objeto gerado, considerando o estágio atual de
-desenvolvimento do Robcmp e dos backends AVR e ARM do LLVM.
+In recent years, advances in large language models (LLMs) have made it possible to apply artificial intelligence techniques to tasks 
+previously performed exclusively by humans, including code generation and transformation. Recent works, particularly the LLM-Compiler 
+model, have demonstrated that LLMs trained on compiler intermediate representations are capable of suggesting optimization pass sequences 
+and, in some cases, generating optimized code, making the compilation process more intelligent. However, these efforts have been directed 
+primarily at general-purpose architectures, which are incompatible with the constraints of microcontrollers used in embedded systems—devices 
+that, due to their severe resource limitations, would greatly benefit from this new technology. Addressing this gap, this work proposes and 
+implements a reproducible pipeline dedicated to preparing all necessary material for the supervised refinement of the LLM-Compiler in the 
+AVR domain (focused on the ATmega328P), enabling LLMs to be adapted to the limitations and particularities of MCUs. The pipeline integrates 
+the stages of generating and collecting C programs (both synthetic and real), automatic conversion to the Robotics Language (ROBL) via 
+\texttt{c2rob} software, compilation into LLVM-IR targeting the AVR backend, execution of a controlled search over a converted set of 1,289 
+optimization sequences, and the automatic creation of \textit{prompt}/\textit{label} pairs in a format suitable for \textit{Supervised 
+Fine-Tuning}. As artifacts, this work delivers automated scripts, consolidated data (JSONL pairs and tables of best sequences), and 
+documentation that enables future fine-tuning on appropriate computational infrastructures. In terms of contribution, the main result is 
+the availability of an ecosystem designed to support future research on code optimization for microcontrollers. The tools and datasets 
+produced allow researchers to evaluate and compare optimization strategies tailored to the AVR domain, while also serving as a foundation 
+for fine-tuning experiments aimed at improving optimization pass generation in embedded systems.
 \vspace{0.5cm}
 
-\textbf{Palavras-chaves:} Linguagem de programação; CORDIC; Bibliotecas padrão; Robcmp.
+\textbf{Keywords:}  LLM; compiler optimization; LLVM-IR; AVR microcontrollers; pipeline; fine-tuning.
 \clearpage
 
 
@@ -409,7 +406,7 @@ de entrada e das respostas na saída do modelo.
 
 \section{Objetivo do Trabalho}
 Diante desse cenário, o presente trabalho teve como objetivo elaborar um conjunto de ferramentas, códigos e materiais necessários para realizar o refinamento do modelo LLM-Compiler \cite{cummins2023large}, 
-e possibilitar a plicação futura de um treinamento adicional com programas e otimizações no domínio de microcontroladores, especificamente a 
+e possibilitar a aplicação futura de um treinamento adicional com programas e otimizações no domínio de microcontroladores, especificamente a 
 plataforma alvo AVR do LLVM. 
 
 Nossa proposta envolveu a formação de uma base de dados específica, composta por códigos de representação intermediária (IR), extraídos durante o processo de compilação na linguagem ROBL.
@@ -912,19 +909,25 @@ futuro refinamento do modelo LLM-Compiler para o domínio AVR.
 
 \subsection{LLM-Compiler}
 
-O trabalho de \cite{cummins2023large} introduz o LLM-Compiler, um modelo de
-linguagem treinado para inferir sequências de otimização para o compilador LLVM, bem
-como gerar código otimizado equivalente ao produzido por essas sequências. O modelo,
-baseado em um LLaMA com 7 bilhões de parâmetros, é alimentado por um dataset
-composto por códigos LLVM-IR não otimizados e suas respectivas sequências de passes
-ótimos oriundos de métodos semi-exaustivos.
+O artigo de \cite{cummins2023large} introduz o LLM-Compiler, a primeira aplicação extensiva de Large Language Models ao 
+problema de ordenação de passes do LLVM com objetivo de redução de tamanho de código. Os autores treinam um modelo, utilizando a biblioteca transformers, 
+com 7 bilhões de parâmetros e arquitetura LLaMA-2 a partir do zero, usando um conjunto de 1 milhão de funções LLVM-IR, 
+e estabeleceram que além de prever a lista de passes, o modelo também aprende a predizer a contagem 
+de instruções antes e depois de gerar o IR otimizado como tarefa auxiliar. 
 
-Os autores demonstram que o modelo é capaz de superar a flag \texttt{-Oz} em
-média de 3\% a 5\% na contagem de instruções, além de possuir alta capacidade de gerar
-código compilável e semanticamente equivalente. Esse trabalho constitui o ponto de partida
-desta pesquisa, uma vez que o presente estudo visa adaptar o LLM-Compiler para o domínio
-de microcontroladores AVR, expandindo sua capacidade de otimização para arquiteturas
-com restrições severas de memória e instruções.
+De forma prática, os autores constroem um padrão de sequências via autotuning (busca extensiva e algoritmo de minimização das sequências), 
+e usam esse padrão como label supervisionado para treinar o LLM. O treinamento envolveu aproximadamente 15.7 bilhões de tokens e 620 dias de GPU, como 
+referência, o autotuner alcançava ganhos maiores (5\%) mas à custa de bilhões de compilações adicionais, enquanto o LLM atingiu 
+um ganho prático de 3\% sobre a flag \texttt{-Oz} sem invocar o compilador em inferência. Complementarmente, o modelo produz 
+código compilável em 90\% dos casos e acerta o IR final caractere por caractere em cerca de 70\%, evidenciando capacidade real de 
+raciocínio sobre transformações de compilador. 
+
+Para este trabalho, \cite{cummins2023large} fornecem o fundamento conceitual e base prática (o próprio LLM-Compiler). Os autores provaram que LLMs podem aprender 
+lógicas de otimização e substituir buscas ineficientes por predições eficientes. Sua pesquisa, porém, foi elaborada para arquiteturas 
+de propósito geral e com janelas de contexto e datasets dimensionados para esse tipo de CPU. Este presente trabalho, aproveita essa abordagem 
+mas a adaptada ao domínio de MCU AVR (em particular ATmega328P), enfrentando desafios diferentes, como severas restrições de memória, conjunto de instruções 
+reduzido, necessidade de converter e mapear passes entre versões do LLVM e limites de tempo, por isso, a maior contribuição da pesquisa de \cite{cummins2023large} 
+para este trabalho é a base teórica e demonstração prática que inspirou a necessidade da atual pesquisa.
 
 \subsection{Good Optimization Sequences Covering Program Space}
 
@@ -936,25 +939,34 @@ na redução de tamanho e melhoria de desempenho.
 
 Esta pesquisa é fundamental para o presente trabalho, pois seu método de redução
 de sequências é utilizado diretamente no processo de filtragem das listas geradas pelo
-autotuning descrito por Faustino et al. (2021). Assim, sua contribuição teórica fornece a
-base para garantir que somente os passes essenciais sejam mantidos nas listas que farão
+autotuning descrito por \cite{faustino2021new} e utilizado na lista \textit{Optimization Cache}. Assim, sua
+contribuição teórica fornece a base para garantir que somente os passes essenciais sejam mantidos nas listas que farão
 parte do dataset final.
 
 \subsection{Optimization Sequences for Code-Size Reduction}
 
 O trabalho de \cite{faustino2021new} apresenta um método sistemático para encontrar
 sequências de otimização voltadas especificamente à redução de tamanho de código no
-LLVM. Utilizando algoritmos genéticos combinados com a ferramenta YaCoS, os autores
-geram um grande conjunto inicial de possíveis sequências, filtram as melhores e, em seguida,
-aplicam o método de Purini e Jain (2013) para remover passes redundantes.
+LLVM. Os autores realizaram um estudo em grande escala, compilando 15\,000
+programas com 10\,044 sequências distintas geradas e avaliadas, usando um algoritmo genético (via YaCoS) para produzir um
+conjunto inicial de candidatas, seguido da aplicação do algoritmo de redução de \cite{PuriniJain2013} para eliminar passes redundantes.
+Desse processo emergiram cinco sequências curtas (12–15 transformações) que, em vários benchmarks,
+chegaram a produzir binários menores que as flags padrão do LLVM e reduziram o tempo de compilação em relação a \texttt{-Os}/\texttt{-Oz}.
+Essas realizações estão detalhadas no estudo e servem como demonstração prática de que sequências bem escolhidas e compactas
+podem chegar perto, e em alguns casos superar, as configurações padrão, com ganho também em tempo de compilação.
 
-O presente trabalho utiliza diretamente essa metodologia para gerar o dataset de
-sequências ótimas para códigos ROBL compilados para LLVM-IR, servindo como fonte
-principal para as listas de passes usadas no treinamento supervisionado do modelo
-refinado. Dessa forma, o trabalho de Faustino et al. constitui a principal referência prática
-para geração das sequências ótimas utilizadas.
+Do ponto de vista metodológico, o trabalho organiza critérios úteis para selecionar e avaliar sequências: a construção da matriz 
+programa sequência (optimization matrix), medidas como "best frequency", "good in bounds", "total size", "geometric relative size" e "best 
+maximum relative size". Essas ferramentas permitem quantificar não apenas qual sequência é “melhor” para um 
+programa isolado, mas também analisar robustez e diversidade de comportamento sobre um corpus extenso. Além disso, os resultados mostram 
+que as novas sequências tendem a ser muito mais curtas que \texttt{-Os}/\texttt{-Oz} (média aproximadamente 40 a 79 passes nas propostas 
+versus 260 nas flags), o que explica ganhos substanciais em tempo de compilação e qualidade ou compacidade em muitos casos. 
 
-
+Para o presente TCC, a influência do trabalho de \cite{faustino2021new} é direta e prática: adoptamos a \textit{Optimization Cache} como fonte principal
+de sequências candidatas e como ponto de partida para a busca da melhor sequência por programa. A abordagem deles justificou tanto a
+escolha de testar um conjunto finito e criterioso de sequências (em vez de tentar uma busca exponencial) quanto a
+aplicação do processo de redução e filtragem para obter sequências compactas e reprodutíveis, mostrando que o método deles abrange um caminho aplicável,
+embora exija mudanças adicionais para domínios com restrições severas de recursos.
 
 %===== Seção de Metodologia ==============
 
@@ -1078,10 +1090,13 @@ sequência de passes para cada programa, torna-se possível estruturar o conjunt
 supervisionado do modelo de linguagem. Esta fase consiste em transformar cada código processado em um par composto 
 por \textit{prompt} e \textit{label}, seguindo o padrão metodológico proposto no trabalho original do LLM-Compiler \cite{cummins2023large}.
 
-Após a execução do script \texttt{rodar\_seq\_uniq\_AVR.sh}, cada programa possui três informações fundamentais: (i) o arquivo 
-LLVM-IR resultante da compilação sem otimizações expressivas, (ii) a melhor sequência de passes encontrada dentre as 1289 sequências testadas 
-e (iii) o arquivo de assembly otimizado correspondente a essa sequência. Com esses elementos, torna-se possível construir pares de 
-entrada e saída adequados ao processo de aprendizado supervisionado (\textit{Supervised Fine-Tuning}).
+Após a execução do script \texttt{rodar\_seq\_uniq\_AVR.sh}, cada programa possui três informações fundamentais: o arquivo 
+LLVM-IR resultante da compilação sem otimizações expressivas, a melhor sequência de passes encontrada dentre as 1289 sequências testadas 
+e o arquivo de assembly otimizado correspondente a essa sequência. Com esses elementos, torna-se possível construir pares de 
+entrada e saída adequados ao processo de aprendizado supervisionado (\textit{Supervised Fine-Tuning}). Ao total foram gerados 1721 pares
+\textit{prompt/label}, derivados dos 1803 códigos que foram convertidos para ROBL e passaram pelo processo de otimização, essa diferença se dá
+ao fato de que alguns códigos não geraram sequências válidas ou apresentaram falhas durante a compilação e portanto são descartados do conjunto
+de formação de pares.
 
 Em cada instância do conjunto de dados, o \textit{prompt} consiste em uma instrução textual em inglês seguida do código LLVM-IR 
 não otimizado. A instrução foi definida conforme o padrão empregado por \cite{cummins2023large}, mantendo a estrutura funcional do 
@@ -1128,13 +1143,12 @@ Diferentemente do trabalho original, cujo treinamento foi conduzido em infraestr
 hiperparâmetros, o presente trabalho utiliza recursos em nuvem da plataforma Hugging Face, adequados às limitações de escopo e 
 hardware disponíveis.
 
-Para esse fim, foi criado um ambiente dedicado na plataforma, acessível por meio do espaço público 
-\url{https://huggingface.co/spaces/Cal-mfbc5446/STF-PFC2}. Esse ambiente foi configurado para possibilitar o 
+Para esse fim, foi criado um ambiente dedicado na plataforma, acessível por meio do espaço público\footnote{\url{https://huggingface.co/spaces/Cal-mfbc5446/STF-PFC2}}. Esse ambiente foi configurado para possibilitar o 
 \textit{Supervised Fine-Tuning} (SFT) do modelo, utilizando uma GPU Nvidia A10G na configuração \textit{large}, 
 contendo 12 vCPUs, 46 GB de RAM e 24 GB de VRAM. A opção pela execução em nuvem se justifica pela necessidade de 
 memória de vídeo compatível com janelas de contexto amplas, inviáveis em hardware local.
 
-O processo de treinamento foi conduzido utilizando a ferramenta AutoTrain Advanced \cite{huggingface_autotrain}, 
+O processo de treinamento foi conduzido utilizando a ferramenta AutoTrain Advanced \footnote{\url{https://huggingface.co/docs/autotrain}}, 
 que possibilita a realização de ajuste fino supervisionado sem a necessidade de desenvolvimento de código adicional, 
 operando por meio de interface gráfica. Embora essa abordagem reduza a flexibilidade na configuração de hiperparâmetros, 
 permite um fluxo de experimentação mais rápido e simplificado, adequado ao escopo deste trabalho.
@@ -1144,8 +1158,8 @@ Entretanto, apenas parte das estratégias apresentadas no trabalho original pôd
 utilizar:
 
 \begin{itemize}
-    \item o \textit{scheduler} do tipo Cosine, também presente no LLM-Compiler;
-    \item o otimizador AdamW, sem a possibilidade de especificar manualmente os valores de $\beta_1$ e $\beta_2$;
+    \item O \textit{scheduler} do tipo Cosine, também presente no LLM-Compiler;
+    \item O otimizador AdamW, sem a possibilidade de especificar manualmente os valores de $\beta_1$ e $\beta_2$;
     \item \textit{weight decay} e taxa de aprendizado configuráveis dentro dos limites da ferramenta.
 \end{itemize}
 
@@ -1164,8 +1178,8 @@ conjunto de teste. A validação permite monitorar sobreajuste, enquanto o conju
 refinado durante a etapa de resultados.
 
 Embora o treinamento completo não tenha sido executado dentro do prazo deste trabalho, toda a infraestrutura necessária para sua 
-realização foi preparada, incluindo: (i) configuração do ambiente computacional; (ii) definição dos hiperparâmetros; (iii) organização 
-do dataset final; e (iv) preparação do pipeline para execução direta do SFT. 
+realização foi preparada, incluindo a configuração do ambiente computacional, a definição dos hiperparâmetros, a organização 
+do dataset final e a preparação do pipeline para execução direta do SFT.
 
 %Assim, o presente trabalho entrega não apenas um conjunto 
 %de dados estruturado, mas também um ambiente completo e funcional para o treinamento futuro do modelo, atendendo integralmente ao objetivo 
@@ -1177,11 +1191,12 @@ do dataset final; e (iv) preparação do pipeline para execução direta do SFT.
 \chapter{Resultados}
 
 A partir do pipeline implementado neste trabalho foi possível construir um conjunto de aproximadamente 
-\textbf{1\,000 pares} \textit{prompt}/\textit{label} destinado ao treinamento supervisionado do LLM-Compiler especializado 
+\textbf{1\,721 pares} \textit{prompt}/\textit{label} destinado ao treinamento supervisionado do LLM-Compiler especializado 
 para AVR. Cada \textit{prompt} corresponde ao código em ROBL compilado para LLVM-IR (versão não otimizada, compilada com a 
-flag \texttt{-O1}) e o respectivo \textit{label} contém a melhor sequência de passes de otimização identificada para a plataforma 
-alvo (ATmega328P) e o código assembly gerado após a aplicação desses passes. O conjunto foi produzido a partir de programas 
-originalmente escritos em C, gerados por Csmith e coletados no AnghaBench, convertidos para ROBL, compilados com diferentes 
+flag \texttt{-O1}), e o respectivo \textit{label}, contém a melhor sequência de passes de otimização identificada para a plataforma 
+alvo (ATmega328P) e o código assembly gerado após a aplicação desses passes. O conjunto foi produzido a partir de aproximadamente
+90 mil programas originalmente escritos em C, sendo estes, 80 mil gerados por Csmith e 10 mil coletados no AnghaBench. Dos quais, arbitrariamente 1000 códigos do Csmith 
+e 803 códigos do AnghaBench, foram convertidos para ROBL, totalizando um total de 1803 códigos compilados com diferentes 
 sequências de passes e avaliados quanto ao tamanho do objeto gerado para a plataforma AVR.
 
 A seleção das melhores sequências para cada programa foi realizada utilizando a lista de sequências derivada do trabalho de 
@@ -1190,14 +1205,14 @@ A seleção das melhores sequências para cada programa foi realizada utilizando
 repositório do pipeline (por exemplo, \texttt{rodar\_seq\_uniq\_AVR.sh}, \texttt{parallel-run.py} e \texttt{coleta\_melhores.py}), 
 que percorrem o conjunto de 1.289 sequências únicas consideradas e registram, para cada programa, a sequência que produz o menor tamanho 
 de objeto e o respectivo \texttt{.s} / \texttt{.o} / \texttt{.ll} resultante. A comparação detalhada entre as sequências do Faustino e as 
-flags padrão encontra-se documentada na planilha \textit{Comparação Otimização Faustino vs Padrão} disponível no link: \href{https://github.com/Alisson-Teles/Pipeline-training/blob/main/AVR/Compara%C3%A7%C3%A3o%20Otimiza%C3%A7%C3%A3o%20Faustino%20vs%20Padr%C3%A3o%20-%20P%C3%A1gina1.pdf
-}{do repositório}.
+flags padrão encontra-se documentada na planilha \textit{Comparação Otimização Faustino vs Padrão} disponível no link: \url{https://github.com/Alisson-Teles/Pipeline-training/blob/main/AVR/Compara%C3%A7%C3%A3o%20Otimiza%C3%A7%C3%A3o%20Faustino%20vs%20Padr%C3%A3o%20-%20P%C3%A1gina1.pdf
+}.
 
 Dessa forma, os resultados práticos deste trabalho incluem os scripts: 
 \begin{itemize}
-    \item O script \textit{rodar_seq_uniq_AVR.sh} responsável por aplicar, para cada programa em LLVM-IR, todas as 1289 sequências de otimização únicas derivadas do trabalho de \cite{faustino2021new}. Compilando o código para AVR para cada sequência, armazenando os arquivos resultantes (.s, .o, .ll) e registrando, para cada programa, aquela sequência que produz o menor tamanho de objeto, definindo assim o “melhor caso”.
-    \item O script \textit{parallel-run.py} que atua paralelizando a execução do \textit{rodar_seq_uniq_AVR.sh} em múltiplos núcleos da CPU, permitindo processar simultaneamente diversos códigos. Reduzindo drasticamente o tempo total de execução.
-    \item O script \textit{coleta_melhores.py} que percorre todas as subpastas de resultados produzidas pelas compilações e extrai, para cada programa, o arquivo objeto melhor.o e seu tamanho em bytes. Esses valores são consolidados em um arquivo único \textit{melhores.csv}, organizado como uma tabela contendo o nome do programa e o tamanho pós otimização.
+    \item O script \textit{rodar\_seq\_uniq\_AVR.sh} responsável por aplicar, para cada programa em LLVM-IR, todas as 1289 sequências de otimização únicas derivadas do trabalho de \cite{faustino2021new}. Compilando o código para AVR para cada sequência, armazenando os arquivos resultantes (.s, .o, .ll) e registrando, para cada programa, aquela sequência que produz o menor tamanho de objeto, definindo assim o “melhor caso”.
+    \item O script \textit{parallel-run.py} que atua paralelizando a execução do \textit{rodar\_seq\_uniq\_AVR.sh} em múltiplos núcleos da CPU, permitindo processar simultaneamente diversos códigos. Reduzindo drasticamente o tempo total de execução.
+    \item O script \textit{coleta\_melhores.py} que percorre todas as subpastas de resultados produzidas pelas compilações e extrai, para cada programa, o arquivo objeto melhor.o e seu tamanho em bytes. Esses valores são consolidados em um arquivo único \textit{melhores.csv}, organizado como uma tabela contendo o nome do programa e o tamanho pós otimização.
     \item O script \textit{promptLavel.py} que realiza a montagem dos pares de treinamento. Carregando tanto o IR não otimizado quanto o assembly otimizado, além da sequência de passes ótima e do tamanho final do objeto, e organiza essas informações no formato JSONL adotado pelo LLM-Compiler.
 \end{itemize}
 
@@ -1205,37 +1220,42 @@ Além dos scripts, este trabalho também contribuiu com dados prontos para consu
 \begin{itemize}
     \item \textbf{\texttt{dec\_otimizacoes\_GLOBAL.csv}}, contendo o registro global dos resultados das compilações realizadas pelas flags padrões. Esse arquivo sintetiza, para cada programa e para cada flag, o tamanho do objeto gerado e permite validação e comparação de desempenho entre diferentes tecnicas de otimização.
     \item \textbf{\texttt{melhores.csv}}, que consolida somente as melhores sequências descobertas para cada programa após a execução da metodologia exaustiva. Esse arquivo é fundamental para a etapa de construção dos pares \textit{prompt}/\textit{label}, pois fornece a sequência de passes selecionada como rótulo supervisionado do modelo.
-    \item \textbf{\texttt{pairs.jsonl}}, que contém o dataset final que poderá ser utilizado no treinamento supervisionado. Cada linha contém um objeto JSON estruturado com o \textit{prompt} (texto inicial + código LLVM-IR não otimizado) e o \textit{label} (sequência ótima de passes + assembly otimizado). Esse arquivo segue o formato recomendado para pipelines do Hugging Face e serve como dataset de refinamento do LLM-COMPILER para AVR.
+    \item \textbf{\texttt{Dataset-AVR-Completo.jsonl}}, que contém o dataset final que poderá ser utilizado no treinamento supervisionado. Cada linha contém um objeto JSON estruturado com o \textit{prompt} (texto inicial + código LLVM-IR não otimizado) e o \textit{label} (sequência ótima de passes + assembly otimizado). Esse arquivo segue o formato recomendado para pipelines do Hugging Face e serve como dataset de refinamento do LLM-COMPILER para AVR.
     \item \textbf{\texttt{requirements.txt}}, que especifica o ambiente mínimo necessário para executar os scripts do pipeline e manipular os dados gerados, garantindo reprodutibilidade e facilitando a replicação do experimento em outras máquinas ou em ambientes.
 \end{itemize}
 
-Adicionalmente
+Adicionalmente, este trabalho também contribuiu no processo de configuraçao do ambiente de refinamento do modelo,
+ao adicionar o espaço público \texttt{Cal-mfbc5446/STF-PFC2}\footnote{Disponível em \url{https://huggingface.co/spaces/Cal-mfbc5446/STF-PFC2}} na plataforma Hugging Face, disponibilizar o dataset de treinamento já convertido no
+formato de jsonl e parquet (formato que o hugging face armazena em nuvem o dataset)\footnote{disponível em \url{https://huggingface.co/datasets/Cal-mfbc5446/Dataset-AVR-Completo}}, e também disponibilizando todas as configurações de hiperparâmetros 
+que podem ser utilizadas no refinamento do modelo, no arquivo \texttt{parametros-de-treinamento-IA.txt}\footnote{Disponível em \url{https://github.com/Alisson-Teles/Pipeline-training/tree/main/AVR}}.
 
-Com o conjunto final de pares pronto e a infraestrutura de treinamento configurada (ambiente no Hugging Face, 
-espaço \texttt{Cal-mfbc5446/STF-PFC2} e parâmetros de treinamento registrados), foram conduzidos testes exploratórios de 
-inferência utilizando o modelo refinado no domínio STM32 como referência de método (modelo refinado para outra MCU) e o 
-pipeline AVR como alvo principal desta pesquisa. Embora o modelo originalmente refinado para STM32 ofereça indícios de que a 
-técnica de fine-tuning é viável, a transferência direta entre domínios distintos (STM32 $\rightarrow$ AVR) mostra-se limitada: 
-diferenças de ABI, conjunto de instruções e restrições de memória tornam a generalização direta impraticável sem adaptação específica 
-do dataset. Assim, o resultado prático obtido nesta fase foi a validação do pipeline (geração, conversão, compilação, seleção e 
-empacotamento dos pares) e a preparação de um dataset de tamanho suficiente para iniciar experimentos de fine-tuning direcionados ao 
-ATmega328P.
+Outro resultado deste trabalho é a análise comparativa entre as sequências do Faustino e as flags padrão, presente na \hyperref[fig:Comparação Otimização Faustino vs Padrão]{Figura~\ref*{fig:Comparação Otimização Faustino vs Padrão}}, 
+que mostra uma vantagem significativa das sequências especializadas em relação à flag padrão \texttt{-Oz}, com \textit{52,1\%} dos 1803 casos apresentandos demonstrando redução de tamanho de código em relação 
+à \texttt{-Oz}, \textit{47,9\%} dos casos apresentando resultados equivalentes e apenas \textit{0,1\%} dos casos apresentando piora em relação à \texttt{-Oz}. 
+Este resultado, corrobora com a relevância de usar conjuntos de sequências especializados como ponto de partida para a construção de pares de treinamento e é disponibilizada como material de apoio ao presente trabalho.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Imagens/Gráfico-comparativo.png}
+    \caption[Comparação de Otimização]{Comparação de Otimização. Fonte: \url{https://github.com/Alisson-Teles/Pipeline-training/tree/main/AVR}(Elaboração Própria).}
+    \label{fig:Comparação Otimização Faustino vs Padrão}
+\end{figure}
 
-Foram realizados testes exploratórios de inferência para avaliar qualitativamente a capacidade do pipeline e do processo de 
-ajuste fino (quando aplicado). Em inferências preliminares — conduzidas sobre um subconjunto de programas selecionados dos 
-benchmarks Csmith e AnghaBench — observou-se que o modelo apresenta capacidade de sugerir sequências estruturalmente compatíveis 
-com aquelas observadas no conjunto de treinamento em casos pontuais, porém com generalização limitada em razão do número reduzido 
-de exemplos (1\,000 pares) e das diferenças intrínsecas entre programas. Em suma, não se reivindica aqui um resultado conclusivo 
-de ganho consistente sobre \texttt{-Oz} para AVR; o que se demonstra é a maturidade do pipeline e sua reprodutibilidade para executar 
-experimentos de fine-tuning e avaliação quantitativa futura.
+Vale a pena mencionar, que esta pesquisa, elaborada em conjunto com outro trabalho de tema semelhante, obteve um modelo refinado para a família de MCUs
+Stm32\footnote{Disponível em \url{https://huggingface.co/Cal-mfbc5446/LlmCompiler-Stm32FineTunningFinal}}, cujo pipeline de geração de dados e configuração de treinamento seguiu uma metodologia semelhante à descrita neste trabalho. O modelo refinado é capaz de sugerir sequências de passes compatíveis com
+aquelas observadas no treinamento, porém após realizado testes de inferência o modelo apresentou um comportamento de sucesso esporádico, retornando padrões de otimização previamente
+observados somente para alguns códigos provenientes do conjunto de treinamento do AnghaBench. Portanto, esse comportamento inconsistente não é suficiente para considerar esse resultado como conclusivo,
+porém é um indicativo positivo de que o método empregado em ambos trabalhos é viável e pode ser aprimorado em trabalhos futuros, visto que o tamanho reduzido do conjunto de treinamento e as limitações de tempo, também foram os principais
+problemas encontrados no refinamento deste modelo de IA. 
 
-Portanto, o principal resultado deste trabalho é a implementação de um \textbf{pipeline reprodutível e público} que cobre 
-toda a cadeia: (i) geração e seleção de programas em C; (ii) conversão automatizada para ROBL; (iii) compilação com listas 
-exaustivas de passes (1.289 sequências únicas) e comparação com flags padrão; (iv) coleta das melhores sequências e montagem dos 
-pares \textit{prompt}/\textit{label}; e (v) preparação do ambiente de fine-tuning. A análise comparativa entre as sequências do 
-Faustino e as flags padrão (arquivo de suporte) corrobora a relevância de usar conjuntos de sequências especializados como ponto de 
-partida para a construção de pares de treinamento e é disponibilizada como material de apoio ao presente trabalho. :contentReference[oaicite:1]{index=1}
-
+Portanto, o principal resultado deste trabalho é a implementação de um pipeline reprodutível e público que cobre 
+todo o processo:
+\begin{itemize}
+    \item Geração e seleção de programas em C
+    \item Conversão automatizada para ROBL
+    \item Compilação com listas exaustivas de passes (1.289 sequências únicas) e comparação com flags padrão
+    \item Coleta das melhores sequências e montagem dos pares \textit{prompt}/\textit{label}
+    \item Preparação do ambiente de fine-tuning
+\end{itemize}
 % ----------------------------------------------------------
 %    Discussão
 % ----------------------------------------------------------
@@ -1243,43 +1263,28 @@ partida para a construção de pares de treinamento e é disponibilizada como ma
 
 Durante o desenvolvimento deste trabalho, observou-se uma série de limitações que impactaram diretamente o escopo e os resultados alcançados.
 Os principais desafios enfrentados foram decorrentes de restrições de tempo, orçamento e gastos computacionais. Estes problemas acarretaram em uma 
-série de mudanças no planejamento inicial, que influenciaram diretamente o escopo deste trabalho. Diversas mudanças foram aplicadas no decorrer desta pesquisa,
-a mais significativa delas foi que o refinamento, e consequentemente a inferência e validação, do modelo LLM-Compiler para AVR não poderia ser concluído dentro do prazo estipulado. 
-Desta forma, a contribuição principal deste trabalho é o desenvolviemnto prático e teórico de um pipeline capaz de fornecer toda a base necessária para o refinamento futuro do modelo.
+série de mudanças no planejamento inicial, que influenciaram diretamente o escopo deste trabalho. Diversas mudanças foram aplicadas no decorrer desta pesquisa, porém,
+a mais significativa delas foi, que o refinamento e consequentemente a inferência e validação, do modelo LLM-Compiler para AVR não poderia ser concluído dentro do prazo estipulado. 
+Desta forma, a contribuição principal deste trabalho é o desenvolvimento prático e teórico de um pipeline capaz de fornecer toda a base necessária para o refinamento futuro do modelo.
 
-Outros problemas relevantes que causaram uma mudança no escopo deste projeto foi o custo computacional associado à execução do pipeline completo,
-em especial a etapa de autotuning. A execução do método completo, de elaborado por \cite{faustino2021new} demandaria tempo e adicionaria complexidade 
-a um projeto já limitado por prazos e recursos. Em função dessas limitações, optou-se por restringir o autotuning a uma lista predefinida de sequências 
-a \textit{Optimization Cache} derivada de \cite{faustino2021new} e por processar um subconjunto controlado de programas priorizando a reprodutibilidade do pipeline, (da geração à produção 
-dos pares \textit{prompt}/\textit{label}) em detrimento da exploração exaustiva do espaço combinatório de passes.
+Outros problemas relevantes que causaram uma mudança no escopo deste projeto foi a estimativa de tempo e recursos associados à execução do pipeline completo de autotunnig
+proposto por \cite{faustino2021new}. A execução do método completo, demandaria tempo e adicionaria complexidade a um projeto já limitado por prazos e recursos. Em função dessas limitações, optou-se por restringir o autotuning a uma lista predefinida de sequências 
+a \textit{Optimization Cache} derivada de outros trabalhos de \cite{faustino2021new} e por processar um subconjunto controlado de programas priorizando a reprodutibilidade do pipeline, em detrimento da exploração exaustiva do espaço combinatório de passes. 
+Além disso, por causa destas restrições de tempo e capacidade computacional, o volume de programas processados foi reduzido de 90 mil códigos iniciais para aproximadamente 1.800 códigos efetivamente convertidos para ROBL e avaliados com a lista de 1.289 sequências únicas,
+o que por sua vez impactou diretamente no tamanho do dataset final produzido para o treinamento do modelo, que ficou reduzido para aproximadamente 1.700 pares \textit{prompt}/\textit{label}.
 
 Outra limitação relevante refere-se ao tamanho dos exemplos em termos de tokens e à janela de contexto disponível para o fine-tuning. Em 
-razão da GPU utilizada (Nvidia A10G alugada via Hugging Face), o parâmetro \texttt{model\_max\_length} foi ajustado para 8192 tokens. 
+razão da GPU utilizada (Nvidia A10G alugada via Hugging Face, que possui 12vCPU, 46 GB de RAM e 24 GB de VRAM), o parâmetro \texttt{model\_max\_length} foi ajustado para 8192 tokens. 
 Vários exemplos gerados pelo pipeline excederam esse limite, exigindo truncamento para viabilizar o treinamento. O truncamento potencialmente 
 remove contexto semântico importante para a escolha adequada de passes, prejudicando a qualidade do aprendizado. Porém, foi escolhido 
 preservar os prompts completos no repositório, pensando em infraestruturas futuras que permitam janelas de contexto maiores.
 
-Outros problemas técnicos superados, foi a conversão e mapeamento manual dos passes da lista \textit{Optimization Cache}, 
+Outros problemas técnicos superados, foram a conversão e mapeamento manual dos passes da lista \textit{Optimization Cache}, 
 originalmente definidos para LLVM-10, para torná-los utilizáveis no LLVM-20. Essa etapa de adaptação introduziu um esforço adicional para garantir que 
 todas as sequências pudessem ser aplicadas corretamente, evitando falhas de compilação e garantindo a integridade do processo de autotuning.
 
-%Como consequência direta desse projeto de compromisso, o conjunto final empregado nas etapas de preparação do treinamento ficou reduzido 
-%para aproximadamente \textbf{1\,000 pares} \textit{prompt}/\textit{label} voltados ao domínio AVR (especificamente ATmega328P). Esse volume 
-%é significativamente inferior às ordens de grandeza empregadas em trabalhos correlatos que treinam modelos fundacionais para otimização de 
-%compiladores. A escala limitada reduz a capacidade de generalização do modelo refinado: é razoável esperar desempenho aceitável em programas 
-%similares aos observados no treinamento, mas queda acentuada quando confrontado com códigos estruturalmente distintos, maiores ou que 
-%explorem construções de linguagem não contempladas nas amostras usadas.
-
-%Os testes e a análise comparativa realizados indicam um comportamento relevante da \textit{Optimization Cache} no domínio AVR. Conforme 
-%sumarizado no gráfico de comparação (pizza) incluído nos materiais de apoio, verifica-se que, para a amostra testada, as sequências 
-%derivadas de Faustino et al. produzem binários menores do que a flag padrão \texttt{-Oz} em \textbf{92,6\%} dos casos, enquanto em 
-%\textbf{7,4\%} os resultados foram equivalentes. Essa distribuição sugere que, dentro do subconjunto de programas analisados, as sequências 
-%especializadas são amplamente competitivas frente às flags tradicionais e, em boa parte dos exemplos, dominam a configuração padrão do 
-%compilador para redução de tamanho. Tal constatação reforça a utilidade prática de partir de um conjunto de sequências pré-computadas como 
-%ponto de partida para a construção de datasets de treinamento.
-
-Por fim, apesar das limitações supracitadas, o principal mérito prático do trabalho é a entrega de um pipeline reprodutível e público 
-que cobre toda a cadeia de experimentação (geração de código, conversão para ROBL, aplicação e avaliação de 1\,289 sequências únicas, 
+Por fim, apesar das limitações, o principal mérito prático do trabalho é a entrega de um pipeline reprodutível e público
+que cobre toda a cadeia de experimentação (geração de código, conversão para ROBL, aplicação e avaliação de 1\,289 sequências únicas,
 coleta das melhores sequências, montagem dos pares \textit{prompt}/\textit{label} e configuração de um ambiente e parâmetros de refinamento de IA),
 necessários para o fine-tunning futuro do LLM-Compiler no domínio AVR. 
 
@@ -1287,7 +1292,40 @@ necessários para o fine-tunning futuro do LLM-Compiler no domínio AVR.
 %   Conclusão
 % ----------------------------------------------------------
 \chapter{Conclusão e Trabalhos Futuros}
+Neste trabalho foi desenvolvido um pipeline reprodutível para a geração de dados de treinamento visando o refinamento do modelo 
+LLM-Compiler na tarefa de otimização de código em microcontroladores AVR (em específico para ATmega328P). O processo abrangeu automação das etapas de
+geração de código C, conversão automática para ROBL (via c2rob), compilação para LLVM-IR com o backend AVR, aplicação de 1.289 
+sequências de passes de otimização (baseadas em \cite{faustino2021new}) e comparação com flags tradicionais do LLVM, gerando a construção 
+de pares de prompt e label para fine-tuning. A geração de diversos exemplos de treinamento aplicando sequências de passes de otimização está 
+alinhada com estratégias usadas em LLMs especializados para compiladores, evidenciando que é possível obter, de forma automatizada, o 
+conjunto de dados necessário para ajustar o modelo.
 
+Como resultado, foi produzido um conjunto contendo cerca de 1.721 pares (prompt/label) dentre os 1.803 códigos compilados. Embora de tamanho limitado, esse conjunto 
+foi gerado de forma consistente e reprodutível, segundo a metodologia proposta. As principais limitações observadas incluem 
+o elevado custo computacional necessário para executar as milhares de compilizações otimizadas e o tempo de execução deste projeto. 
+Essas restrições impediram a execução do refinamento final do modelo LLM-Compiler para AVR dentro deste trabalho. Entretanto, 
+estudos similares voltados a microcontroladores (por exemplo, arquiteturas ARM Cortex-M como STM32) já ilustram a viabilidade prática dessa 
+metodologia, servindo de referência para outros trabalhos que seguem a mesma linha de pesquisa.
+
+Apesar das limitações enfrentadas, o pipeline desenvolvido e o conjunto de dados produzidos configuram uma base sólida e valiosa para 
+pesquisas futuras. A estrutura proposta mostra, na prática, que é possível automatizar de ponta a ponta o processo de preparação de dados 
+para o refinamento de modelos de linguagem voltados à otimização de código embarcado. Embora o presente trabalho não tenha realizado o ajuste 
+fino do modelo, os recursos disponibilizados estabelecem as condições necessárias para que essa etapa seja facilmente executada em estudos 
+posteriores.
+
+
+\section{Trabalhos Futuros}
+
+Para aprofundar e ampliar os resultados deste estudo, sugerem-se as seguintes direções de pesquisa:
+\begin{itemize}
+    \item Fine-tuning para AVR: realizar efetivamente o refinamento (fine-tuning) do modelo LLM-Compiler para a arquitetura AVR usando os dados já produzidos, possibilitando validar na prática o ganho de qualidade de código otimizado em compilação real.
+    \item Expansão para outras variantes AVR: estender o pipeline para suportar diferentes variantes da arquitetura AVR (além do ATmega328P), de modo a coletar e gerar dados de treinamento específicos para outros microcontroladores da família, aumentando a abrangência do modelo.
+    \item Geração automática de sequências de passes: explorar estratégias de geração automática de novas sequências de passes de otimização, indo além do conjunto fixo utilizado (\textit{Optimization Cache}). Por exemplo, empregar amostragem aleatória ou algoritmos genéticos para cobrir um espaço maior de combinações de passes e enriquecer o conjunto de dados.
+    \item Integração no robcmp: incorporar o modelo refinado ao compilador robcmp por meio de uma nova opção (por exemplo, uma flag -IA), permitindo que o compilador realize inferência com o modelo LLM durante o processo de compilação. Essa integração viabilizaria a aplicação direta do modelo em tempo de compilação para escolher otimizações, aproximando a pesquisa de um uso prático.
+\end{itemize}
+
+Essas iniciativas poderão superar as limitações atuais e aproximar o pipeline de uma aplicação prática, ampliando o potencial de 
+otimização de código para sistemas embarcados e fundamentando pesquisas futuras em otimização de compiladores.
 
 % ----------------------------------------------------------
 % Capitulo com exemplos de comandos inseridos de arquivo externo 

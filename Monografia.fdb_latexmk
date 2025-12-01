@@ -1,21 +1,21 @@
 # Fdb version 4
-["bibtex Monografia"] 1764590536.82997 "Monografia.aux" "Monografia.bbl" "Monografia" 1764590692.31211 0
+["bibtex Monografia"] 1764590536.82997 "Monografia.aux" "Monografia.bbl" "Monografia" 1764591637.62036 0
   "./MinhaBiblioteca.bib" 1764029640 9552 9b949819d93c4ac86ae748ccb1dd1881 ""
   "C:/Users/Caleb/AppData/Local/Programs/MiKTeX/bibtex/bib/abntex2/abntex2-options.bib" 1543103229 5396 4eb260dac60f150ae608d45252853090 ""
   "C:/Users/Caleb/AppData/Local/Programs/MiKTeX/bibtex/bst/abntex2/abntex2-alf.bst" 1543103230 60064 0819ac8568f9a482510a46e3a8a6f605 ""
-  "Monografia.aux" 1764590690 41741 d88d8760c461a3c96a8c318c7dae0d8d "pdflatex"
-  "abntex2-modelo-include-comandos.aux" 1764590690 1992 21d9add942daabd00099cc893421ec29 "pdflatex"
+  "Monografia.aux" 1764591635 41741 d88d8760c461a3c96a8c318c7dae0d8d "pdflatex"
+  "abntex2-modelo-include-comandos.aux" 1764591635 1992 21d9add942daabd00099cc893421ec29 "pdflatex"
   (generated)
   "Monografia.bbl"
   "Monografia.blg"
   (rewritten before read)
-["makeindex Monografia.idx"] 1764558844.22327 "Monografia.idx" "Monografia.ind" "Monografia" 1764590692.3114 0
-  "Monografia.idx" 1764590690 46 e52ff3660f8259058a0913d8fb18f985 "pdflatex"
+["makeindex Monografia.idx"] 1764558844.22327 "Monografia.idx" "Monografia.ind" "Monografia" 1764591637.61933 0
+  "Monografia.idx" 1764591635 46 e52ff3660f8259058a0913d8fb18f985 "pdflatex"
   (generated)
   "Monografia.ilg"
   "Monografia.ind"
   (rewritten before read)
-["pdflatex"] 1764590687.18809 "c:/Users/Caleb/OneDrive/Documents/TCC/Monografia.tex" "Monografia.pdf" "Monografia" 1764590692.31346 0
+["pdflatex"] 1764591632.25472 "c:/Users/Caleb/OneDrive/Documents/TCC/Monografia.tex" "Monografia.pdf" "Monografia" 1764591637.62232 0
   "C:/Users/Caleb/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1762214556 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
   "C:/Users/Caleb/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1762214436 13321867 236b7493014bf293096992941b3ef701 ""
   "C:/Users/Caleb/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc" 1256929440 2375 baa924870cfb487815765f9094cf3728 ""
@@ -193,16 +193,16 @@
   "Imagens/Gráfico-comparativo.png" 1764512292 22040 2856b46b6230355e2f336bc3e6fac145 ""
   "Imagens/LLVM-IR.png" 1764512292 85049 8e186da24c49e35282ac6d50beec8de3 ""
   "Imagens/Supervisionado.png" 1764512292 239862 a05132fc509ce849ef0149cc57279564 ""
-  "Monografia.aux" 1764590690 41741 d88d8760c461a3c96a8c318c7dae0d8d "pdflatex"
+  "Monografia.aux" 1764591635 41741 d88d8760c461a3c96a8c318c7dae0d8d "pdflatex"
   "Monografia.bbl" 1764590537 7869 ed5ef93c83dddaf0edb47fd73e47c559 "bibtex Monografia"
-  "Monografia.brf" 1764590690 6686 91a7d8194a333c34bebd3cee34265125 "pdflatex"
+  "Monografia.brf" 1764591635 6686 91a7d8194a333c34bebd3cee34265125 "pdflatex"
   "Monografia.ind" 1764558844 77 15fa1c26fd60b0bcf376c21fa5ea0f63 "makeindex Monografia.idx"
-  "Monografia.lof" 1764590690 791 6b1739c4ebeb10e4b8f62f24fbcc3971 "pdflatex"
-  "Monografia.tex" 1764590685 110493 53a9505eebaa442f47e9f663af89823d ""
-  "Monografia.toc" 1764590690 5185 d2fe05730ecf718384cc5ed98969dade "pdflatex"
-  "abntex2-modelo-include-comandos.aux" 1764590690 1992 21d9add942daabd00099cc893421ec29 "pdflatex"
+  "Monografia.lof" 1764591635 791 6b1739c4ebeb10e4b8f62f24fbcc3971 "pdflatex"
+  "Monografia.tex" 1764591630 110547 4ce01004038407ad01453318997fd380 ""
+  "Monografia.toc" 1764591635 5185 d2fe05730ecf718384cc5ed98969dade "pdflatex"
+  "abntex2-modelo-include-comandos.aux" 1764591635 1992 21d9add942daabd00099cc893421ec29 "pdflatex"
   "abntex2-modelo-include-comandos.tex" 0 -1 0 ""
-  "c:/Users/Caleb/OneDrive/Documents/TCC/Monografia.tex" 1764590685 110493 53a9505eebaa442f47e9f663af89823d ""
+  "c:/Users/Caleb/OneDrive/Documents/TCC/Monografia.tex" 1764591630 110547 4ce01004038407ad01453318997fd380 ""
   "dados.tex" 1764023790 797 14f76935257dd501ae0bf0eec4bff67d ""
   (generated)
   "Monografia.aux"

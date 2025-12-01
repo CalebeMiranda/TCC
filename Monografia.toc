@@ -40,10 +40,10 @@
 \contentsline {section}{\numberline {4.1}Introdução}{33}{section.4.1}%
 \contentsline {section}{\numberline {4.2}Elaboração do conjunto de códigos C}{33}{section.4.2}%
 \contentsline {subsubsection}{\numberline {4.2.0.1}Códigos sintéticos gerados com Csmith}{33}{subsubsection.4.2.0.1}%
-\contentsline {subsubsection}{\numberline {4.2.0.2}Códigos reais obtidos do AnghaBench}{34}{subsubsection.4.2.0.2}%
+\contentsline {subsection}{\numberline {4.2.1}Códigos reais obtidos do AnghaBench}{34}{subsection.4.2.1}%
 \contentsline {section}{\numberline {4.3}Conversão de C para RobL}{34}{section.4.3}%
 \contentsline {section}{\numberline {4.4}Método exaustivo de busca da melhor sequência de passes de otimização.}{35}{section.4.4}%
-\contentsline {section}{\numberline {4.5}Geração dos pares \textit {prompt/label} e elaboração do \textit {dataset} de treinamento}{36}{section.4.5}%
+\contentsline {section}{\numberline {4.5}Geração dos pares \textit {prompt/label} e elaboração do \textit {dataset} de treinamento}{37}{section.4.5}%
 \contentsline {section}{\numberline {4.6}Configuração de treinamento do modelo}{38}{section.4.6}%
 \setlength {\cftchapterindent }{0em} \setlength {\cftchapternumwidth }{\cftlastnumwidth }
 \contentsline {chapter}{\chapternumberline {5}\MakeTextUppercase []{Resultados}}{40}{chapter.5}%

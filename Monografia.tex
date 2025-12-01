@@ -976,7 +976,7 @@ embora exija mudanças adicionais para domínios com restrições severas de rec
 
 Neste capítulo será abordado o método aplicado no escopo desta pesquisa. Será detalhado a abordagem empregada durante as diversas
 etapas do processo de elaboração deste trabalho, especificando pontos chaves de cada etapa para garantir a replicabilidade desta pesquisa. Neste capítulo,
-também será exemplificado e descrito os códigos e ferramentas, utilizadas durante todo o processo, que podem ser encontrados \href{https://github.com/Alisson-Teles/Pipeline-training/tree/main/AVR}{neste repositório do Github}.
+também será exemplificado e descrito os códigos e ferramentas, utilizadas durante todo o processo, que podem ser encontrados \href{https://github.com/CalebeMiranda/Pipeline-training/tree/main/AVR}{neste repositório do Github}.
 
 \section{Elaboração do conjunto de códigos C} 
 
@@ -996,7 +996,7 @@ Uma vez definidos os parâmetros ideais, foi desenvolvido um script em \textit{s
 responsável por automatizar a geração de grandes volumes de programas C. Esse script executa o Csmith repetidamente utilizando 
 opções como \texttt{--max-funcs 2}, \texttt{--no-global-variables}, entre outras configurações que restringem a complexidade e 
 asseguram compatibilidade posterior com o processo de conversão para ROBL. O código do script encontra-se disponível no 
-repositório público: \url{https://github.com/Alisson-Teles/Pipeline-training/blob/main/AVR/CSMITH/csmithrun.sh}.
+repositório público: \url{https://github.com/CalebeMiranda/Pipeline-training/tree/main/AVR/CSMITH}.
 
 Com esse procedimento, foram gerados aproximadamente 80 mil códigos sintéticos em C. Embora a meta inicial fosse atingir 100 mil 
 programas, estimativas de tempo de treinamento do modelo indicaram que 100k exemplos tornariam o processo excessivamente longo. 
@@ -1013,7 +1013,7 @@ Como os programas do AnghaBench já são curtos e subdivididos em funções isol
 pré-processamento adicional. Para compor o subconjunto utilizado nesta pesquisa, foram selecionados 10 mil códigos aleatórios 
 a partir dos diretórios do AnghaBench, utilizando o comando \texttt{find} no terminal para amostragem simples dos arquivos disponíveis.
 
-Ao final desta etapa, o conjunto inicial de programas em C — combinando cerca de 80k códigos sintéticos e 10k códigos reais — 
+Ao final desta etapa, o conjunto inicial de programas em C, combinando cerca de 80k códigos sintéticos e 10k códigos reais,
 foi consolidado e preparado para as etapas seguintes do pipeline.
 
 \section{Conversão de C para RobL}
@@ -1032,12 +1032,12 @@ filtragem automática dos programas obtidos na etapa anterior. A filtragem foi r
 do \texttt{c2rob}: sempre que o conversor emitia um erro de tradução o código correspondente era automaticamente excluído do fluxo principal. 
 Assim, o erro de sintaxe emitido pelo \texttt{c2rob} funcionou como um critério objetivo de incompatibilidade.
 
-%Isso não está correto... 
-%A escolha de gerar aproximadamente 80 mil programas C com o Csmith contribuiu significativamente para esse processo, garantindo ampla variedade estrutural e reduzindo a necessidade de intervenção manual. Os programas que não puderam ser convertidos para ROBL, mas ainda eram válidos em C, foram compilados com o Clang utilizando a flag \texttt{-O1}, garantindo ao menos um nível básico de tratamento e permitindo sua eventual utilização para fins experimentais e comparativos em etapas posteriores.
-
 Ao final desta fase, obtém-se exclusivamente o conjunto de programas que foram efetivamente convertidos para ROBL e considerados aptos para seguir para as etapas seguintes do pipeline.
 
-\textcolor{red}{O conjunto resultante possui xxx programas do CSmith e xxx do AnghaBench... caracterize o dataset resultante.}
+O conjunto resultante possui 1000 programas do CSmith e 803 do AnghaBench, totalizando 1803 códigos RobL válidos e compiláveis para a arquitetura AVR. Foi escolhido manter esse volume de códigos, mesmo que menor que o inicialmente previsto,
+devido principalmente às limitações financeiras e de tempo de treinamento do modelo, que ultrapassavam o período disponível para elaboração deste que este trabalho. Os códigos convertidos do Csmith possuem em média 45 Kb de tamanho,
+com aproximadamente 1200 linhas de código cada, enquanto os códigos do AnghaBench são menores, com cerca de 2 Kb e 100 linhas em média. Essa diferença de tamanho se deve ao fato que o repositório AnghaBench já disponibiliza códigos curtos e isolados,
+geralmente funções ou pequenos trechos retirados de códigos maiores, enquanto o Csmith gera códigos mais extensos, mas não necessariamente complexos, dado que são compiláveis mas não possuem uma aplicação prática definida, exceto o teste de compiladores.
 
 
 \section{Método exaustivo de busca da melhor sequência de passes de otimização.}
@@ -1081,7 +1081,7 @@ Por fim, empregou-se o script \texttt{coleta\_melhores.py} para consolidar os re
 durante a fase de otimização e extrai o arquivo \texttt{melhor.txt} de cada código analisado, compilando todos esses resultados em um 
 único arquivo \texttt{melhores.csv}. Este arquivo constitui o conjunto final de sequências ótimas associado ao dataset e será utilizado 
 nas etapas posteriores de formação dos pares \textit{prompt}/\textit{label} e preparação do conjunto de treinamento do modelo. Todos os códigos
-e arquivos gerados estão disponíveis no repositório: \url{https://github.com/Alisson-Teles/Pipeline-training/tree/main/AVR}.
+e arquivos gerados estão disponíveis no repositório: \url{https://github.com/CalebeMiranda/Pipeline-training/tree/main/AVR}.
 
 \section{Geração dos pares \textit{prompt/label} e elaboração do \textit{dataset} de treinamento}
 
@@ -1120,7 +1120,7 @@ Após essa mensagem inicial, inclui-se o código assembly gerado a partir da apl
 tanto a justificativa textual quanto o resultado concreto da aplicação dos passes, replicando, parcialmente, a estrutura esperada pelo treinamento do modelo original.
 
 A geração automática desses pares foi realizada por meio do script \texttt{promptLabel.py}, disponível no repositório público do 
-pipeline (\url{https://github.com/Alisson-Teles/Pipeline-training/blob/main/AVR/PROMPT_LABEL/promptLavel.py}). O script percorre 
+pipeline (\url{https://github.com/CalebeMiranda/Pipeline-training/tree/main/AVR}). O script percorre 
 todos os diretórios contendo os arquivos LLVM-IR, as sequências ótimas (\texttt{melhor.txt}) e os arquivos de assembly otimizados, 
 combinando essas informações e produzindo um arquivo final no formato \texttt{JSONL}. Cada linha do arquivo está mapeada por uma coluna "messages", seguido 
 de "content", assim como esperado pelo serviço de \textit{autotrain} do \textit{hugging face}, e a linha representa um par de dados, contendo os campos:
@@ -1166,7 +1166,7 @@ ajustado para 8\,192 tokens, metade do utilizado no trabalho original (16\,384 t
 modelo pudesse ser carregado e treinado sem exceder a capacidade de VRAM.
 
 Todos os hiperparâmetros utilizados no treinamento foram registrados no arquivo \texttt{parametros-de-treinamento-IA.txt}, disponível 
-no repositório oficial do pipeline no GitHub: \url{https://github.com/Alisson-Teles/Pipeline-training/tree/main/AVR}. O arquivo documenta 
+no repositório oficial do pipeline neste \href{https://github.com/CalebeMiranda/Pipeline-training/tree/main/AVR}{GitHub}. O arquivo documenta 
 as configurações efetivamente aplicadas, incluindo divisões do conjunto de dados, \textit{learning rate}, tamanho do lote e número de épocas 
 planejado.
 
@@ -1179,9 +1179,6 @@ Embora o treinamento completo não tenha sido executado dentro do prazo deste tr
 realização foi preparada, incluindo a configuração do ambiente computacional, a definição dos hiperparâmetros, a organização 
 do dataset final e a preparação do pipeline para execução direta do SFT.
 
-%Assim, o presente trabalho entrega não apenas um conjunto 
-%de dados estruturado, mas também um ambiente completo e funcional para o treinamento futuro do modelo, atendendo integralmente ao objetivo 
-%de estabelecer um pipeline reprodutível para o refinamento do LLM-Compiler no domínio AVR.
 
 % ----------------------------------------------------------
 %    Resultados
@@ -1203,9 +1200,8 @@ A seleção das melhores sequências para cada programa foi realizada utilizando
 repositório do pipeline (por exemplo, \texttt{rodar\_seq\_uniq\_AVR.sh}, \texttt{parallel-run.py} e \texttt{coleta\_melhores.py}), 
 que percorrem o conjunto de 1.289 sequências únicas consideradas e registram, para cada programa, a sequência que produz o menor tamanho 
 de objeto e o respectivo \texttt{.s} / \texttt{.o} / \texttt{.ll} resultante. A comparação detalhada entre as sequências apresentadas por \citeonline{faustino2021new} e as 
-flags padrões encontra-se documentada na planilha \textit{Comparação Otimização Faustino vs Padrão} disponível no link: \url{https://github.com/Alisson-Teles/Pipeline-training/blob/main/AVR/Compara%C3%A7%C3%A3o%20Otimiza%C3%A7%C3%A3o%20Faustino%20vs%20Padr%C3%A3o%20-%20P%C3%A1gina1.pdf
-}.
-\textcolor{red}{Coloque como hyperlink, \\hyperref (se não me engano) para esconder estes links longos, esteticamente ruins, nada profissionais.}
+flags padrões encontra-se documentada na planilha \textit{Comparação Otimização Faustino vs Padrão} disponível \href{https://github.com/CalebeMiranda/Pipeline-training/blob/main/AVR/Compara%C3%A7%C3%A3o%20Otimiza%C3%A7%C3%A3o%20Faustino%20vs%20Padr%C3%A3o%20-%20P%C3%A1gina1.pdf}{neste link.}
+
 
 Dessa forma, os resultados práticos deste trabalho incluem os scripts: 
 \begin{itemize}
@@ -1226,7 +1222,7 @@ Além dos scripts, este trabalho também contribuiu com dados prontos para consu
 Adicionalmente, este trabalho também contribuiu no processo de configuraçao do ambiente de refinamento do modelo,
 ao adicionar o espaço público \texttt{Cal-mfbc5446/STF-PFC2}\footnote{Disponível em \url{https://huggingface.co/spaces/Cal-mfbc5446/STF-PFC2}} na plataforma Hugging Face, disponibilizar o dataset de treinamento já convertido no
 formato de jsonl e parquet (formato que o hugging face armazena em nuvem o dataset)\footnote{disponível em \url{https://huggingface.co/datasets/Cal-mfbc5446/Dataset-AVR-Completo}}, e também disponibilizando todas as configurações de hiperparâmetros 
-que podem ser utilizadas no refinamento do modelo, no arquivo \texttt{parametros-de-treinamento-IA.txt}\footnote{Disponível em \url{https://github.com/Alisson-Teles/Pipeline-training/tree/main/AVR}}.
+que podem ser utilizadas no refinamento do modelo, no arquivo \texttt{parametros-de-treinamento-IA.txt}\footnote{Disponível em \url{https://github.com/CalebeMiranda/Pipeline-training/tree/main/AVR}}.
 
 Outro resultado deste trabalho é a análise comparativa entre as sequências do Faustino e as flags padrão, presente na \hyperref[fig:Comparação Otimização Faustino vs Padrão]{Figura~\ref*{fig:Comparação Otimização Faustino vs Padrão}}, 
 que mostra uma vantagem significativa das sequências especializadas em relação à flag padrão \texttt{-Oz}, com \textit{52,1\%} dos 1803 casos apresentandos demonstrando redução de tamanho de código em relação 
@@ -1235,7 +1231,7 @@ Este resultado, corrobora com a relevância de usar conjuntos de sequências esp
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{Imagens/Gráfico-comparativo.png}
-    \caption[Comparação de Otimização]{Comparação de Otimização. Fonte: \url{https://github.com/Alisson-Teles/Pipeline-training/tree/main/AVR}(Elaboração Própria).}
+    \caption[Comparação de Otimização]{Comparação de Otimização. Fonte: \url{https://github.com/CalebeMiranda/Pipeline-training/tree/main/AVR}(Elaboração Própria).}
     \label{fig:Comparação Otimização Faustino vs Padrão}
 \end{figure}
 
@@ -1282,10 +1278,10 @@ Outros problemas técnicos superados foram a conversão e mapeamento manual dos 
 originalmente definidos para LLVM-10, para torná-los utilizáveis no LLVM-20. Essa etapa de adaptação introduziu um esforço adicional para garantir que 
 todas as sequências pudessem ser aplicadas corretamente, evitando falhas de compilação e garantindo a integridade do processo de autotuning.
 
-Por fim, apesar das limitações, o principal mérito prático do trabalho é a entrega de um pipeline reprodutível e público
-que cobre toda a cadeia de experimentação (geração de código, conversão para ROBL, aplicação e avaliação de 1\,289 sequências únicas,
-coleta das melhores sequências, montagem dos pares \textit{prompt}/\textit{label} e configuração de um ambiente e parâmetros de refinamento de IA),
-necessários para o fine-tunning futuro do LLM-Compiler no domínio AVR. 
+%Por fim, apesar das limitações, o principal mérito prático do trabalho é a entrega de um pipeline reprodutível e público
+%que cobre toda a cadeia de experimentação (geração de código, conversão para ROBL, aplicação e avaliação de 1\,289 sequências únicas,
+%coleta das melhores sequências, montagem dos pares \textit{prompt}/\textit{label} e configuração de um ambiente e parâmetros de refinamento de IA),
+%necessários para o fine-tunning futuro do LLM-Compiler no domínio AVR. 
 
 % ----------------------------------------------------------
 %   Conclusão

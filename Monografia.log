@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.11.3)  28 NOV 2025 14:55
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.11.3)  1 DEC 2025 09:04
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1102,11 +1102,6 @@ LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <17.28> not available
 
 
 [36]
-Overfull \hbox (41.363pt too wide) in paragraph at lines 1124--1129
-\T1/lmr/m/n/12 (-20) dis-po-ní-vel no re-po-si-tó-rio pú-blico do pi-pe-line ([][]$<[]https : / / github . com / Alisson-[]Teles / Pipeline-[]training /
- []
-
-
 
 [37]
 
@@ -1115,12 +1110,7 @@ Overfull \hbox (41.363pt too wide) in paragraph at lines 1124--1129
 [39{C:/Users/Caleb/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-mathit.enc}]
 Cap\'{\i }tulo 5.
 
-Overfull \hbox (20.51607pt too wide) in paragraph at lines 1202--1210
-\T1/lmr/m/n/12 (-20) main / AVR / Compara % C3 % A7 % C3 % A3o % 20Otimiza % C3 % A7 % C3 % A3o % 20Faustino % 20vs %
- []
-
-
-Overfull \hbox (3.86426pt too wide) in paragraph at lines 1214--1215
+Overfull \hbox (3.86426pt too wide) in paragraph at lines 1209--1210
 []\T1/lmr/m/n/12 (-20) O script \T1/lmr/m/it/12 (-20) parallel-run.py \T1/lmr/m/n/12 (-20) que atua pa-ra-le-li-zando a exe-cu-ção do \T1/lmr/m/it/12 (-20) ro-dar_seq_uniq_AVR.sh
  []
 
@@ -1130,26 +1120,20 @@ Overfull \hbox (3.86426pt too wide) in paragraph at lines 1214--1215
 
 ]
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <12> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 1221.
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 1216.
 
-Overfull \hbox (5.61095pt too wide) in paragraph at lines 1227--1231
+Overfull \hbox (5.61095pt too wide) in paragraph at lines 1222--1226
 \T1/lmr/m/n/12 (-20) am-bi-ente de re-fi-na-mento do mo-delo, ao adi-ci-o-nar o es-paço pú-blico \T1/lmtt/m/n/12 Cal-mfbc5446/STF-PFC2[][][][][]
  []
 
+<Imagens/GrÃ¡fico-comparativo.png, id=643, 394.47375pt x 264.23718pt>
+File: Imagens/GrÃ¡fico-comparativo.png Graphic file (type png)
+<use Imagens/GrÃ¡fico-comparativo.png>
+Package pdftex.def Info: Imagens/GrÃ¡fico-comparativo.png  used on input line 1233.
+(pdftex.def)             Requested size: 318.49861pt x 213.3455pt.
 
 
 [41]
-<Imagens/GrÃ¡fico-comparativo.png, id=652, 394.47375pt x 264.23718pt>
-File: Imagens/GrÃ¡fico-comparativo.png Graphic file (type png)
-<use Imagens/GrÃ¡fico-comparativo.png>
-Package pdftex.def Info: Imagens/GrÃ¡fico-comparativo.png  used on input line 1238.
-(pdftex.def)             Requested size: 318.49861pt x 213.3455pt.
-
-Underfull \hbox (badness 1776) in paragraph at lines 1239--1239
-[][]|\T1/lmr/m/n/12 (+20) Com-pa-ra-ção de Oti-mi-za-ção. Fonte: [][]$<[]https : / / github . com / Alisson-[]Teles /
- []
-
-
 
 [42 <./Imagens/GrÃ¡fico-comparativo.png>]
 
@@ -1164,7 +1148,7 @@ Cap\'{\i }tulo 6.
 [45]
 Cap\'{\i }tulo 7.
 
-Overfull \hbox (20.8062pt too wide) in paragraph at lines 1303--1309
+Overfull \hbox (20.8062pt too wide) in paragraph at lines 1298--1304
 []\T1/lmr/m/n/12 (-20) Como re-sul-tado, foi pro-du-zido um con-junto con-tendo cerca de 1.721 pa-res (prompt/label)
  []
 
@@ -1207,20 +1191,20 @@ LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2020/03/25>
  ***********
 Package rerunfilecheck Info: File `Monografia.brf' has not changed.
-(rerunfilecheck)             Checksum: A2E00B706437C4E515A097C5D5CB557F;6645.
+(rerunfilecheck)             Checksum: 91A7D8194A333C34BEBD3CEE34265125;6686.
  ) 
 Here is how much of TeX's memory you used:
  21529 strings out of 468080
- 364258 string characters out of 5425772
- 921856 words of memory out of 5000000
+ 364251 string characters out of 5425772
+ 920856 words of memory out of 5000000
  49415 multiletter control sequences out of 15000+600000
- 747187 words of font info for 236 fonts, out of 8000000 for 9000
+ 747219 words of font info for 236 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  99i,13n,107p,1045b,761s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/Caleb/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pfb><C:/Users/Caleb/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbxi10.pfb><C:/Users/Caleb/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmmi12.pfb><C:/Users/Caleb/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr10.pfb><C:/Users/Caleb/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr12.pfb><C:/Users/Caleb/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr7.pfb><C:/Users/Caleb/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr8.pfb><C:/Users/Caleb/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri10.pfb><C:/Users/Caleb/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri12.pfb><C:/Users/Caleb/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmss10.pfb><C:/Users/Caleb/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmss12.pfb><C:/Users/Caleb/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmss17.pfb><C:/Users/Caleb/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmssbo10.pfb><C:/Users/Caleb/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmssbx10.pfb><C:/Users/Caleb/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsso12.pfb><C:/Users/Caleb/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsso17.pfb><C:/Users/Caleb/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy10.pfb><C:/Users/Caleb/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtk10.pfb><C:/Users/Caleb/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt12.pfb>
-Output written on Monografia.pdf (50 pages, 1051422 bytes).
+Output written on Monografia.pdf (50 pages, 1049265 bytes).
 PDF statistics:
- 1055 PDF objects out of 1200 (max. 8388607)
+ 1053 PDF objects out of 1200 (max. 8388607)
  168 named destinations out of 1000 (max. 500000)
  71055 words of extra memory for PDF output out of 74296 (max. 10000000)
 

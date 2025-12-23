@@ -1,0 +1,35 @@
+Neste trabalho foi desenvolvido um pipeline reprodutível para a geração de dados de treinamento visando o refinamento do modelo 
+LLM-Compiler na tarefa de otimização de código em microcontroladores AVR (em específico para ATmega328P). O processo abrangeu automação das etapas de
+geração de código C, conversão automática para ROBL (via c2rob), compilação para LLVM-IR com o backend AVR, aplicação de 1.289 
+sequências de passes de otimização (baseadas em \cite{faustino2021new}) e comparação com flags tradicionais do LLVM, gerando a construção 
+de pares de prompt e label para fine-tuning. A geração de diversos exemplos de treinamento aplicando sequências de passes de otimização está 
+alinhada com estratégias usadas em LLMs especializados para compiladores, evidenciando que é possível obter, de forma automatizada, o 
+conjunto de dados necessário para ajustar o modelo.
+
+Como resultado, foi produzido um conjunto contendo cerca de 1.721 pares (prompt/label) dentre os 1.803 códigos compilados. Embora de tamanho limitado, esse conjunto 
+foi gerado de forma consistente e reprodutível, segundo a metodologia proposta. As principais limitações observadas incluem 
+o elevado custo computacional necessário para executar as milhares de compilizações otimizadas e o tempo de execução deste projeto. 
+Essas restrições impediram a execução do refinamento final do modelo LLM-Compiler para AVR dentro deste trabalho. Entretanto, 
+estudos similares voltados a microcontroladores (por exemplo, arquiteturas ARM Cortex-M como STM32) já ilustram a viabilidade prática dessa 
+metodologia, servindo de referência para outros trabalhos que seguem a mesma linha de pesquisa.
+
+Apesar das limitações enfrentadas, o pipeline desenvolvido e o conjunto de dados produzidos configuram uma base sólida para 
+pesquisas futuras. A estrutura proposta mostra, na prática, que é possível automatizar de ponta a ponta o processo de preparação de dados 
+para o refinamento de modelos de linguagem voltados à otimização de código embarcado. Embora o presente trabalho não tenha realizado o ajuste 
+fino do modelo, os recursos disponibilizados estabelecem as condições necessárias para que essa etapa seja facilmente executada em estudos 
+posteriores.
+
+
+\section{Trabalhos Futuros}
+
+Para aprofundar e ampliar os resultados deste estudo, sugerem-se as seguintes direções de pesquisa:
+\begin{itemize}
+    \item Ampliar o tamanho do dataset de treinamento, expandindo as conversões disponíveis no c2rob ou a medida que novos recursos forem implementados na ROBL.
+    \item Fine-tuning para AVR: realizar efetivamente o refinamento (fine-tuning) do modelo LLM-Compiler para a arquitetura AVR usando os dados já produzidos, possibilitando validar na prática o ganho de qualidade de código otimizado em compilação real.
+    \item Expansão para outras variantes AVR: estender o pipeline para suportar diferentes variantes da arquitetura AVR (além do ATmega328P), de modo a coletar e gerar dados de treinamento específicos para outros microcontroladores da família, aumentando a abrangência do modelo.
+    \item Geração automática de sequências de passes: explorar estratégias de geração automática de novas sequências de passes de otimização, indo além do conjunto fixo utilizado (\textit{Optimization Cache}). Por exemplo, empregar amostragem aleatória ou algoritmos genéticos para cobrir um espaço maior de combinações de passes e enriquecer o conjunto de dados.
+    \item Integração no robcmp: incorporar o modelo refinado ao compilador robcmp por meio de uma nova opção (por exemplo, uma flag -IA), permitindo que o compilador realize inferência com o modelo LLM durante o processo de compilação. Essa integração viabilizaria a aplicação direta do modelo em tempo de compilação para escolher otimizações, aproximando a pesquisa de um uso prático.
+\end{itemize}
+
+Essas iniciativas poderão superar as limitações atuais e aproximar o pipeline de uma aplicação prática, ampliando o potencial de 
+otimização de código para sistemas embarcados e fundamentando pesquisas futuras em otimização de compiladores.

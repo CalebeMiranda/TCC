@@ -1,0 +1,206 @@
+\section{Introdução}
+
+Neste capítulo será abordado o método aplicado no escopo desta pesquisa. Será detalhado a abordagem empregada durante as diversas
+etapas do processo de elaboração deste trabalho, especificando pontos chaves de cada etapa para garantir a replicabilidade desta pesquisa. Neste capítulo,
+também será exemplificado e descrito os códigos e ferramentas, utilizadas durante todo o processo, que podem ser encontrados \href{https://github.com/CalebeMiranda/Pipeline-training/tree/main/AVR}{neste repositório do Github}.
+
+\section{Elaboração do conjunto de códigos C} 
+
+A primeira etapa do pipeline consiste na geração do conjunto inicial de programas em linguagem C, a partir de duas fontes distintas: 
+códigos sintéticos produzidos automaticamente e códigos reais obtidos de repositórios públicos. O objetivo desta etapa é formar uma base 
+ampla, variada e representativa o suficiente para sustentar o processo posterior de conversão, compilação e autotuning.
+
+\subsubsection{Códigos sintéticos gerados com Csmith}
+
+Para a geração de códigos sintéticos, foi utilizado o software Csmith \cite{yang2011finding}, disponibilizado publicamente 
+em \url{https://github.com/csmith-project/csmith}. Após a instalação da ferramenta conforme instruções do repositório oficial, 
+iniciou-se um processo exploratório para determinar parâmetros adequados de geração. Foram realizados diversos testes com diferentes 
+combinações de opções do Csmith, a fim de identificar uma configuração capaz de produzir códigos: Não excessivamente extensos, evitando que os programas ultrapassassem a janela de contexto do modelo de linguagem a ser futuramente treinado 
+e não demasiadamente simples, de modo a preservar diversidade estrutural e evitar um conjunto de dados pobre em variabilidade, que potencialmente conduzisse a \textit{overfitting}.
+
+Uma vez definidos os parâmetros ideais, foi desenvolvido um script em \textit{shell}, denominado \texttt{csmithrun.sh}, 
+responsável por automatizar a geração de grandes volumes de programas C. Esse script executa o Csmith repetidamente utilizando 
+opções como \texttt{--max-funcs 2}, \texttt{--no-global-variables}, entre outras configurações que restringem a complexidade e 
+asseguram compatibilidade posterior com o processo de conversão para ROBL. O código do script encontra-se disponível no 
+repositório público: \url{https://github.com/CalebeMiranda/Pipeline-training/tree/main/AVR/CSMITH}.
+
+Com esse procedimento, foram gerados aproximadamente 80 mil códigos sintéticos em C. Embora a meta inicial fosse atingir 100 mil 
+programas, estimativas de tempo de treinamento do modelo indicaram que 100k exemplos tornariam o processo excessivamente longo. 
+Assim, adotou-se o conjunto de 80k códigos sintéticos como solução de compromisso entre volume, diversidade e viabilidade computacional.
+
+\subsection{Códigos reais obtidos do AnghaBench}
+
+A segunda fonte de dados consiste em códigos reais provenientes do repositório AnghaBench \cite{da2021anghabench}, 
+disponível em \url{https://github.com/brenocfg/AnghaBench/tree/master}. O AnghaBench contém aproximadamente um milhão de 
+funções em C, extraídas automaticamente de diversos projetos hospedados no GitHub, apresentando grande variedade de estilos, 
+padrões de escrita e estruturas de código típicas de aplicações reais.
+
+Como os programas do AnghaBench já são curtos e subdivididos em funções isoladas, não houve necessidade de tratamento ou
+pré-processamento adicional. Para compor o subconjunto utilizado nesta pesquisa, foram selecionados 10 mil códigos aleatórios 
+a partir dos diretórios do AnghaBench, utilizando o comando \texttt{find} no terminal para amostragem simples dos arquivos disponíveis.
+
+Ao final desta etapa, o conjunto inicial de programas em C, combinando cerca de 80k códigos sintéticos e 10k códigos reais,
+foi consolidado e preparado para as etapas seguintes do pipeline.
+
+\section{Conversão de C para RobL}
+
+A segunda etapa do pipeline consiste exclusivamente na conversão dos programas escritos em C para a linguagem ROBL. 
+Essa conversão é essencial para permitir que os códigos sejam compiláveis pelo Robcmp, e possam ser considerados aplicáveis em uma MCU AVR.
+
+Para realizar a conversão, utilizou-se o conversor \texttt{c2rob}, disponível no repositório oficial do projeto Robotics 
+Language: \url{https://github.com/thborges/c2rob}. O repositório foi clonado, e modificações pontuais foram aplicadas 
+ao \texttt{Makefile} e a arquivos auxiliares, a fim de assegurar que o código convertido estivesse configurado especificamente 
+para a arquitetura alvo adotada neste trabalho, o ATmega328P. Essas alterações garantiram conformidade com as características 
+do backend AVR associado ao Robcmp, que compilava os códigos assim que já estivessem traduzidos, garantindo códigos RobL fiéis e compiláveis.
+
+Como a linguagem ROBL não implementa todos os recursos da linguagem C, tornou-se necessária a aplicação de um mecanismo de 
+filtragem automática dos programas obtidos na etapa anterior. A filtragem foi realizada diretamente a partir da saída 
+do \texttt{c2rob}: sempre que o conversor emitia um erro de tradução o código correspondente era automaticamente excluído do fluxo principal. 
+Assim, o erro de sintaxe emitido pelo \texttt{c2rob} funcionou como um critério objetivo de incompatibilidade.
+
+Ao final desta fase, obtém-se exclusivamente o conjunto de programas que foram efetivamente convertidos para ROBL e considerados aptos para seguir para as etapas seguintes do pipeline.
+
+O conjunto resultante possui 1000 programas do CSmith e 803 do AnghaBench, totalizando 1803 códigos RobL válidos e compiláveis para a arquitetura AVR. Foi escolhido manter esse volume de códigos, mesmo que menor que o inicialmente previsto,
+devido principalmente às limitações financeiras e de tempo de treinamento do modelo, que ultrapassavam o período disponível para elaboração deste que este trabalho. Os códigos convertidos do Csmith possuem em média 45 Kb de tamanho,
+com aproximadamente 1200 linhas de código cada, enquanto os códigos do AnghaBench são menores, com cerca de 2 Kb e 100 linhas em média. Essa diferença de tamanho se deve ao fato que o repositório AnghaBench já disponibiliza códigos curtos e isolados,
+geralmente funções ou pequenos trechos retirados de códigos maiores, enquanto o Csmith gera códigos mais extensos, mas não necessariamente complexos, dado que são compiláveis mas não possuem uma aplicação prática definida, exceto o teste de compiladores.
+
+
+\section{Método exaustivo de busca da melhor sequência de passes de otimização.}
+
+A terceira etapa do pipeline consiste na identificação da melhor sequência de passes de otimização para cada código convertido, 
+com o objetivo de minimizar o tamanho do código objeto gerado para a plataforma AVR. Embora a metodologia completa descrita por \citeonline{faustino2021new} 
+não tenha sido aplicada integralmente, elementos essenciais do seu trabalho foram incorporados ao presente estudo.
+
+A base utilizada nesta etapa foi o conjunto de sequências de otimização conhecido como \textit{Optimization Cache}, 
+disponibilizado pelos autores em seu repositório oficial. Trata-se de um conjunto pré-computado de sequências particularmente 
+eficazes para redução de tamanho de código no LLVM, servindo como uma alternativa robusta às estratégias tradicionais, 
+como a \texttt{-Oz}. Contudo, essas sequências foram originalmente elaboradas para a versão LLVM-10, enquanto esta pesquisa 
+adotou a versão mais recente, LLVM-20. 
+
+Durante os testes iniciais observou-se que apenas cerca de 30\% das sequências podiam ser aplicadas diretamente no LLVM-20. As 
+demais falhavam devido a modificações internas do compilador e no ambiente LLVM. Para contornar esse problema, realizou-se uma conversão manual dos passes, 
+mapeando os equivalentes entre as versões 10 e 20 do LLVM. Após esse trabalho de ajuste, tornou-se possível recuperar 100\% da lista 
+original, composta por \textbf{1289 sequências únicas}, agora compatíveis com a infraestrutura moderna do LLVM-20.
+
+Com a lista completa e compatível, foi construído um processo de compilação exaustiva utilizando o script \texttt{rodar\_seq\_uniq\_AVR.sh}. 
+Esse script recebe como entrada o arquivo \texttt{sequencias\_unicas.txt}, contendo todas as 1289 sequências convertidas, e executa o 
+seguinte procedimento para cada arquivo IR:
+
+\begin{enumerate}
+    \item Aplicação dos passes selecionados ao arquivo LLVM-IR do código de entrada;
+    \item Compilação para assembly AVR;
+    \item Geração do arquivo objeto correspondente;
+    \item Extração e armazenamento do DEC (tamanho em bytes do código objeto);
+    \item Armazenamento dos artefatos referentes à melhor sequência parcial (arquivos \texttt{.s}, \texttt{.o} e \texttt{.ll}).
+\end{enumerate}
+
+Ao término da execução do script para cada código, é gerado um arquivo \texttt{melhor.txt} contendo a sequência ótima 
+responsável pelo menor tamanho de código objeto produzido.
+
+Como o volume de códigos do dataset é significativo, a execução completa do processo em modo sequencial seria impraticável. Para 
+lidar com essa limitação, desenvolveu-se o script \texttt{parallel-run.py}, responsável por paralelizar a execução 
+do \texttt{rodar\_seq\_uniq\_AVR.sh} utilizando nove \textit{threads} da CPU. Esse mecanismo distribui simultaneamente diferentes 
+códigos entre os núcleos disponíveis, reduzindo o tempo total de execução.
+
+Por fim, empregou-se o script \texttt{coleta\_melhores.py} para consolidar os resultados. Esse script percorre todas as pastas geradas 
+durante a fase de otimização e extrai o arquivo \texttt{melhor.txt} de cada código analisado, compilando todos esses resultados em um 
+único arquivo \texttt{melhores.csv}. Este arquivo constitui o conjunto final de sequências ótimas associado ao dataset e será utilizado 
+nas etapas posteriores de formação dos pares \textit{prompt}/\textit{label} e preparação do conjunto de treinamento do modelo. Todos os códigos
+e arquivos gerados estão disponíveis no repositório: \url{https://github.com/CalebeMiranda/Pipeline-training/tree/main/AVR}.
+
+\section{Geração dos pares \textit{prompt/label} e elaboração do \textit{dataset} de treinamento}
+
+Com as etapas anteriores concluídas, a conversão para ROBL, a geração do LLVM-IR não otimizado e a identificação da melhor 
+sequência de passes para cada programa, torna-se possível estruturar o conjunto de dados que será utilizado para o treinamento 
+supervisionado do modelo de linguagem. Esta fase consiste em transformar cada código processado em um par composto 
+por \textit{prompt} e \textit{label}, seguindo o padrão metodológico proposto no trabalho original do LLM-Compiler \cite{cummins2023large}.
+
+Após a execução do script \texttt{rodar\_seq\_uniq\_AVR.sh}, cada programa possui três informações fundamentais: o arquivo 
+LLVM-IR resultante da compilação sem otimizações expressivas, a melhor sequência de passes encontrada dentre as 1289 sequências testadas 
+e o arquivo de assembly otimizado correspondente a essa sequência. Com esses elementos, torna-se possível construir pares de 
+entrada e saída adequados ao processo de aprendizado supervisionado (\textit{Supervised Fine-Tuning}). Ao total foram gerados 1721 pares
+\textit{prompt/label}, derivados dos 1803 códigos que foram convertidos para ROBL e passaram pelo processo de otimização. Essa diferença se dá
+ao fato de que alguns códigos não geraram sequências válidas ou apresentaram falhas durante a compilação e portanto são descartados do conjunto de formação de pares. As falhas durante a compilação se dá devido a conversões realizadas pelo c2rob que ainda não são suportadas pela ROBL.
+
+Em cada instância do conjunto de dados, o \textit{prompt} consiste em uma instrução textual em inglês seguida do código LLVM-IR 
+não otimizado. A instrução foi definida conforme o padrão empregado por \cite{cummins2023large}, mantendo a estrutura funcional do 
+modelo original. A mensagem inicial é:
+
+\begin{quote}
+\textit{``Tell me what passes to run on the following LLVM-IR to reduce the object file size for avr assembly.''}
+\end{quote}
+
+Em seguida, o código LLVM-IR correspondente ao programa é anexado diretamente após essa instrução, compondo o conteúdo completo 
+do \textit{prompt}. Esse formato padronizado orienta o modelo a identificar a tarefa de seleção de passes como um problema de 
+recomendação condicional baseado no IR de entrada.
+
+O \textit{label}, por sua vez, contém a resposta correta esperada para o exemplo. Ele segue o formato descritivo adotado no 
+LLM-Compiler, sendo estruturado da seguinte forma:
+
+\begin{quote}
+\textit{``Run the following passes <lista\_de\_passes> to reduce the object file size to <tamanho\_em\_bytes>.''}
+\end{quote}
+
+Após essa mensagem inicial, inclui-se o código assembly gerado a partir da aplicação da sequência ótima de passes. O \textit{label} engloba,
+tanto a justificativa textual quanto o resultado concreto da aplicação dos passes, replicando, parcialmente, a estrutura esperada pelo treinamento do modelo original.
+
+A geração automática desses pares foi realizada por meio do script \texttt{promptLabel.py}, disponível no repositório público do 
+pipeline (\url{https://github.com/CalebeMiranda/Pipeline-training/tree/main/AVR}). O script percorre 
+todos os diretórios contendo os arquivos LLVM-IR, as sequências ótimas (\texttt{melhor.txt}) e os arquivos de assembly otimizados, 
+combinando essas informações e produzindo um arquivo final no formato \texttt{JSONL}. Cada linha do arquivo está mapeada por uma coluna "messages", seguido 
+de "content", assim como esperado pelo serviço de \textit{autotrain} do \textit{hugging face}, e a linha representa um par de dados, contendo os campos:
+
+\begin{itemize}
+    \item \texttt{"prompt"}: instrução textual seguida do LLVM-IR não otimizado;
+    \item \texttt{"label"}: sequência ótima de passes, redução de tamanho e assembly correspondente;
+\end{itemize}
+
+Esse procedimento resulta em um dataset estruturado, padronizado e diretamente compatível com a etapa de \textit{fine-tuning} do modelo 
+LLM-Compiler, garantindo consistência com a metodologia original e adequação ao domínio específico da arquitetura AVR.
+
+\section{Configuração de treinamento do modelo}
+
+A etapa final do pipeline consiste na configuração do ambiente necessário para o refinamento do modelo LLM-Compiler 
+\cite{cummins2023large}, de modo a adaptá-lo ao domínio específico de otimização de código para microcontroladores AVR. 
+Diferentemente do trabalho original, cujo treinamento foi conduzido em infraestrutura própria e com forte customização de 
+hiperparâmetros, o presente trabalho utiliza recursos em nuvem da plataforma Hugging Face, adequados às limitações de escopo e 
+hardware disponíveis.
+
+Para esse fim, foi criado um ambiente dedicado na plataforma, acessível por meio do espaço público\footnote{\url{https://huggingface.co/spaces/Cal-mfbc5446/STF-PFC2}}. Esse ambiente foi configurado para possibilitar o 
+\textit{Supervised Fine-Tuning} (SFT) do modelo, utilizando uma GPU Nvidia A10G na configuração \textit{large}, 
+contendo 12 vCPUs, 46 GB de RAM e 24 GB de VRAM. A opção pela execução em nuvem se justifica pela necessidade de 
+memória de vídeo compatível com janelas de contexto amplas, inviáveis no hardware local disponível para experimentos.
+
+O processo de treinamento foi conduzido utilizando a ferramenta AutoTrain Advanced \footnote{\url{https://huggingface.co/docs/autotrain}}, 
+que possibilita a realização de ajuste fino supervisionado sem a necessidade de desenvolvimento de código adicional, 
+operando por meio de interface gráfica. Embora essa abordagem reduza a flexibilidade na configuração de hiperparâmetros, 
+permite um fluxo de experimentação mais rápido e simplificado, adequado ao escopo deste trabalho.
+
+Os parâmetros de treinamento empregados foram adaptados a partir das configurações originalmente utilizadas por \citeonline{cummins2023large}. 
+Entretanto, apenas parte das estratégias apresentadas no trabalho original pôde ser reproduzida neste ambiente. Em particular, foi possível 
+utilizar:
+
+\begin{itemize}
+    \item O \textit{scheduler} do tipo Cosine, também presente no LLM-Compiler;
+    \item O otimizador AdamW, sem a possibilidade de especificar manualmente os valores de $\beta_1$ e $\beta_2$;
+    \item \textit{weight decay} e taxa de aprendizado configuráveis dentro dos limites da ferramenta.
+\end{itemize}
+
+Além disso, devido às restrições de memória da GPU disponibilizada na plataforma, o parâmetro \texttt{model\_max\_length} teve de ser 
+ajustado para 8\,192 tokens, metade do utilizado no trabalho original (16\,384 tokens). A redução foi necessária para garantir que o 
+modelo pudesse ser carregado e treinado sem exceder a capacidade de VRAM.
+
+Todos os hiperparâmetros utilizados no treinamento foram registrados no arquivo \texttt{parametros-de-treinamento-IA.txt}, disponível 
+no repositório oficial do pipeline neste \href{https://github.com/CalebeMiranda/Pipeline-training/tree/main/AVR}{GitHub}. O arquivo documenta 
+as configurações efetivamente aplicadas, incluindo divisões do conjunto de dados, \textit{learning rate}, tamanho do lote e número de épocas 
+planejado.
+
+Para a composição do conjunto de treinamento, seguiu-se a divisão tradicionalmente adotada em tarefas de \textit{fine-tuning} 
+supervisionado: 80\% dos pares \textit{prompt}/\textit{label} foram destinados ao treinamento, 10\% ao conjunto de validação e 10\% ao 
+conjunto de teste. A validação permite monitorar sobreajuste, enquanto o conjunto de teste é reservado para a avaliação final do modelo 
+refinado durante a etapa de resultados.
+
+Embora o treinamento completo não tenha sido executado dentro do prazo deste trabalho, toda a infraestrutura necessária para sua 
+realização foi preparada, incluindo a configuração do ambiente computacional, a definição dos hiperparâmetros, a organização 
+do dataset final e a preparação do pipeline para execução direta do SFT.

@@ -1,0 +1,64 @@
+
+% -----------------------------------------------
+% Resumo
+% -----------------------------------------------
+\clearpage
+\thispagestyle{empty}
+\begin{center}
+    {\Large \textbf{Resumo}}
+\end{center}
+\vspace{0.5cm}
+% Texto centralizado horizontalmente, com largura limitada
+
+Nos últimos anos, avanços em modelos de linguagem de grande escala (LLMs) tornaram possível aplicar técnicas de 
+inteligência artificial a tarefas antes exclusivas de mãos humanas, incluindo a geração e transformação de código. 
+Trabalhos recentes, em especial o modelo LLM-Compiler, demonstraram que LLMs treinados sobre representações 
+intermediárias de compiladores são capazes de sugerir sequências de passes de otimização e, em alguns casos, 
+gerar código otimizado, tornando o processo de compilação mais inteligente. Entretanto, esses esforços foram majoritariamente dirigidos a 
+arquiteturas de propósito geral, incompatíveis com microcontroladores usados em sistemas embarcados, que devido a restrições severas de recursos
+se beneficiariam muito desta nova tecnologia. Diante dessa lacuna, este trabalho propõe e implementa um pipeline reprodutível 
+dedicado a preparar o material necessário para o refinamento supervisionado do LLM-Compiler para o domínio AVR (com foco no ATmega328P), 
+permitindo adaptar a capacidade dos LLMs às limitações e particularidades de MCUs. O pipeline integra as etapas de geração e 
+coleta de programas em C (códigos sintéticos e reais), conversão automática para a Robotics Language (ROBL) 
+via software \texttt{c2rob}, compilação para LLVM-IR direcionada ao backend AVR, execução de uma busca controlada sobre um conjunto convertido de 
+1.289 sequências de otimização e geração automática de pares \textit{prompt}/\textit{label} no formato adequado para 
+\textit{Supervised Fine-Tuning}. Como artefatos, o trabalho entrega scripts automatizados, dados consolidados (pares JSONL e tabelas de 
+melhores sequências) e documentação que viabilizam a execução posterior do fine-tuning em infraestruturas apropriadas.
+Em termos de contribuição, o principal resultado é a disponibilização de um ecossistema preparado para futuras pesquisas sobre otimização de código para microcontroladores. 
+O conjunto de ferramentas e datasets produzidos permite avaliar e comparar estratégias de otimização específicas ao domínio AVR, além de servir como base para experimentos de fine-tuning 
+que visem melhorar a geração de sequências de passes em sistemas embarcados.
+\vspace{0.5cm}
+
+\textbf{Palavras-chaves:} LLM; otimização de compiladores; LLVM-IR; microcontroladores AVR; pipeline; fine-tuning.
+\clearpage
+
+
+% -----------------------------------------------
+% Abstract
+% -----------------------------------------------
+\clearpage
+\thispagestyle{empty}
+\begin{center}
+    {\Large \textbf{Abstract}}
+\end{center}
+\vspace{0.5cm}
+In recent years, advances in large language models (LLMs) have made it possible to apply artificial intelligence techniques to tasks 
+previously performed exclusively by humans, including code generation and transformation. Recent works, particularly the LLM-Compiler 
+model, have demonstrated that LLMs trained on compiler intermediate representations are capable of suggesting optimization pass sequences 
+and, in some cases, generating optimized code, making the compilation process more intelligent. However, these efforts have been directed 
+primarily at general-purpose architectures, which are incompatible with the constraints of microcontrollers used in embedded systems—devices 
+that, due to their severe resource limitations, would greatly benefit from this new technology. Addressing this gap, this work proposes and 
+implements a reproducible pipeline dedicated to preparing all necessary material for the supervised refinement of the LLM-Compiler in the 
+AVR domain (focused on the ATmega328P), enabling LLMs to be adapted to the limitations and particularities of MCUs. The pipeline integrates 
+the stages of generating and collecting C programs (both synthetic and real), automatic conversion to the Robotics Language (ROBL) via 
+\texttt{c2rob} software, compilation into LLVM-IR targeting the AVR \textit{backend}, execution of a controlled search over a converted set of 1,289 
+optimization sequences, and the automatic creation of \textit{prompt}/\textit{label} pairs in a format suitable for \textit{Supervised 
+Fine-Tuning}. As artifacts, this work delivers automated scripts, consolidated data (JSONL pairs and tables of best sequences), and 
+documentation that enables future fine-tuning on appropriate computational infrastructures. In terms of contribution, the main result is 
+the availability of an ecosystem designed to support future research on code optimization for microcontrollers. The tools and datasets 
+produced allow researchers to evaluate and compare optimization strategies tailored to the AVR domain, while also serving as a foundation 
+for fine-tuning experiments aimed at improving optimization pass generation in embedded systems.
+\vspace{0.5cm}
+
+\textbf{Keywords:}  LLM; compiler optimization; LLVM-IR; AVR microcontrollers; pipeline; fine-tuning.
+\clearpage

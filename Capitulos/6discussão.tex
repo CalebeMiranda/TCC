@@ -1,0 +1,26 @@
+Durante o desenvolvimento deste trabalho, observou-se uma série de limitações que impactaram diretamente o escopo e os resultados alcançados.
+Os principais desafios enfrentados foram decorrentes de restrições de tempo, orçamento e gastos computacionais. Estes problemas acarretaram em uma 
+série de mudanças no planejamento inicial, que influenciaram diretamente o escopo deste trabalho. Diversas mudanças foram aplicadas no decorrer desta pesquisa, porém,
+a mais significativa delas foi que o refinamento e consequentemente a inferência e validação, do modelo LLM-Compiler para AVR não poderia ser concluído dentro do prazo estipulado. 
+
+%Desta forma, a contribuição principal deste trabalho é o desenvolvimento prático e teórico de um pipeline capaz de fornecer toda a base necessária para o refinamento futuro do modelo.
+
+Outros problemas relevantes que causaram uma mudança no escopo deste projeto foi a estimativa de tempo e recursos associados à execução do pipeline completo de autotunnig
+proposto por \citeonline{faustino2021new}. A execução do método completo demandaria tempo e adicionaria complexidade a um projeto já limitado por prazos e recursos. Em função dessas limitações, optou-se por restringir o autotuning a uma lista predefinida de sequências 
+a \textit{Optimization Cache} derivada de outros trabalhos de \citeonline{faustino2021new} e por processar um subconjunto controlado de programas priorizando a reprodutibilidade do pipeline, em detrimento da exploração exaustiva do espaço combinatório de passes. 
+Além disso, por causa destas restrições de tempo e capacidade computacional, o volume de programas processados foi reduzido de 90 mil códigos iniciais para aproximadamente 1.800 códigos efetivamente convertidos para ROBL e avaliados com a lista de 1.289 sequências únicas,
+o que por sua vez impactou diretamente no tamanho do dataset final produzido para o treinamento do modelo, que ficou reduzido para aproximadamente 1.700 pares \textit{prompt}/\textit{label}.
+
+Outra limitação relevante refere-se ao tamanho dos pares \textit{prompt/label} em termos do número de tokens comparado à janela de contexto do modelo original e a memória disponível para o fine-tuning. Em razão da GPU utilizada (Nvidia A10G alugada via Hugging Face, que possui 12vCPU, 46 GB de RAM e 24 GB de VRAM), o parâmetro \texttt{model\_max\_length} foi ajustado para 8192 tokens. 
+Vários exemplos gerados pelo pipeline excederam esse limite, exigindo truncamento para viabilizar o treinamento. O truncamento potencialmente 
+remove contexto semântico importante para a escolha adequada de passes, prejudicando a qualidade do aprendizado. Porém, foi escolhido 
+preservar os prompts completos no repositório, pensando em infraestruturas futuras que permitam janelas de contexto maiores.
+
+Outros problemas técnicos superados foram a conversão e mapeamento manual dos passes da lista \textit{Optimization Cache}, 
+originalmente definidos para LLVM-10, para torná-los utilizáveis no LLVM-20. Essa etapa de adaptação introduziu um esforço adicional para garantir que 
+todas as sequências pudessem ser aplicadas corretamente, evitando falhas de compilação e garantindo a integridade do processo de autotuning.
+
+%Por fim, apesar das limitações, o principal mérito prático do trabalho é a entrega de um pipeline reprodutível e público
+%que cobre toda a cadeia de experimentação (geração de código, conversão para ROBL, aplicação e avaliação de 1\,289 sequências únicas,
+%coleta das melhores sequências, montagem dos pares \textit{prompt}/\textit{label} e configuração de um ambiente e parâmetros de refinamento de IA),
+%necessários para o fine-tunning futuro do LLM-Compiler no domínio AVR. 

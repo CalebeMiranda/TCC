@@ -1,0 +1,66 @@
+A partir do pipeline implementado neste trabalho foi possível construir um conjunto de 
+1721 pares \textit{prompt}/\textit{label} destinado ao treinamento supervisionado do LLM-Compiler especializado 
+para AVR. Cada \textit{prompt} corresponde ao código em ROBL compilado para LLVM-IR (versão não otimizada, compilada com a 
+flag \texttt{-O1}), e o respectivo \textit{label}, contém a melhor sequência de passes de otimização identificada para a plataforma 
+alvo (ATmega328P) e o código assembly gerado após a aplicação desses passes. O conjunto foi produzido a partir de aproximadamente
+90 mil programas originalmente escritos em C, sendo estes, 80 mil gerados por Csmith e 10 mil coletados no AnghaBench. Dos quais, arbitrariamente 1000 códigos do Csmith 
+e 803 códigos do AnghaBench, foram convertidos para ROBL, totalizando um total de 1803 códigos compilados com diferentes 
+sequências de passes e avaliados quanto ao tamanho do objeto gerado para a plataforma AVR.
+
+A seleção das melhores sequências para cada programa foi realizada utilizando a lista de sequências derivada do trabalho de 
+\citeonline{faustino2021new}, denominada de \textit{Optimization Cache} em conjunto com a comparação contra flags tradicionais do LLVM 
+(\texttt{-Oz}, \texttt{-Os}, \texttt{-O1}, \texttt{-O2}, \texttt{-O3}). Essa etapa foi automatizada pelos scripts desenvolvidos no 
+repositório do pipeline (por exemplo, \texttt{rodar\_seq\_uniq\_AVR.sh}, \texttt{parallel-run.py} e \texttt{coleta\_melhores.py}), 
+que percorrem o conjunto de 1.289 sequências únicas consideradas e registram, para cada programa, a sequência que produz o menor tamanho 
+de objeto e o respectivo \texttt{.s} / \texttt{.o} / \texttt{.ll} resultante. A comparação detalhada entre as sequências apresentadas por \citeonline{faustino2021new} e as 
+flags padrões encontra-se documentada na planilha \textit{Comparação Otimização Faustino vs Padrão} disponível \href{https://github.com/CalebeMiranda/Pipeline-training/blob/main/AVR/Compara%C3%A7%C3%A3o%20Otimiza%C3%A7%C3%A3o%20Faustino%20vs%20Padr%C3%A3o%20-%20P%C3%A1gina1.pdf}{neste link.}
+
+
+Dessa forma, os resultados práticos deste trabalho incluem os scripts: 
+\begin{itemize}
+    \item O script \textit{rodar\_seq\_uniq\_AVR.sh} responsável por aplicar, para cada programa em LLVM-IR, todas as 1289 sequências de otimização únicas derivadas do trabalho de \citeonline{faustino2021new}. Compilando o código para AVR para cada sequência, armazenando os arquivos resultantes (.s, .o, .ll) e registrando, para cada programa, aquela sequência que produz o menor tamanho de objeto, definindo assim o “melhor caso”.
+    \item O script \textit{parallel-run.py} que atua paralelizando a execução do \textit{rodar\_seq\_uniq\_AVR.sh} em múltiplos núcleos da CPU, permitindo processar simultaneamente diversos códigos. Reduzindo o tempo total de execução.
+    \item O script \textit{coleta\_melhores.py} que percorre todas as subpastas de resultados produzidas pelas compilações e extrai, para cada programa, o arquivo objeto melhor.o e seu tamanho em bytes. Esses valores são consolidados em um arquivo único \textit{melhores.csv}, organizado como uma tabela contendo o nome do programa e o tamanho pós otimização.
+    \item O script \textit{promptLavel.py} que realiza a montagem dos pares de treinamento. Carregando tanto o IR não otimizado quanto o assembly otimizado, além da sequência de passes ótima e do tamanho final do objeto, e organiza essas informações no formato JSONL adotado pelo LLM-Compiler.
+\end{itemize}
+
+Além dos scripts, este trabalho também contribuiu com dados prontos para consumo, que é o caso dos arquivos:
+\begin{itemize}
+    \item \textbf{\texttt{dec\_otimizacoes\_GLOBAL.csv}}, contendo o registro global dos resultados das compilações realizadas pelas flags padrões. Esse arquivo sintetiza, para cada programa e para cada flag, o tamanho do objeto gerado e permite validação e comparação de desempenho entre diferentes tecnicas de otimização.
+    \item \textbf{\texttt{melhores.csv}}, que consolida somente as melhores sequências descobertas para cada programa após a execução da metodologia exaustiva. Esse arquivo é fundamental para a etapa de construção dos pares \textit{prompt}/\textit{label}, pois fornece a sequência de passes selecionada como rótulo supervisionado do modelo.
+    \item \textbf{\texttt{Dataset-AVR-Completo.jsonl}}, que contém o dataset final que poderá ser utilizado no treinamento supervisionado. Cada linha contém um objeto JSON estruturado com o \textit{prompt} (texto inicial + código LLVM-IR não otimizado) e o \textit{label} (sequência ótima de passes + assembly otimizado). Esse arquivo segue o formato recomendado para pipelines do Hugging Face e serve como dataset de refinamento do LLM-COMPILER para AVR.
+    \item \textbf{\texttt{requirements.txt}}, que especifica o ambiente mínimo necessário para executar os scripts do pipeline e manipular os dados gerados, garantindo reprodutibilidade e facilitando a replicação do experimento em outras máquinas ou em ambientes.
+\end{itemize}
+
+Adicionalmente, este trabalho também contribuiu no processo de configuraçao do ambiente de refinamento do modelo,
+ao adicionar o espaço público \texttt{Cal-mfbc5446/STF-PFC2}\footnote{Disponível em \url{https://huggingface.co/spaces/Cal-mfbc5446/STF-PFC2}} na plataforma Hugging Face, disponibilizar o dataset de treinamento já convertido no
+formato de jsonl e parquet (formato que o hugging face armazena em nuvem o dataset)\footnote{disponível em \url{https://huggingface.co/datasets/Cal-mfbc5446/Dataset-AVR-Completo}}, e também disponibilizando todas as configurações de hiperparâmetros 
+que podem ser utilizadas no refinamento do modelo, no arquivo \texttt{parametros-de-treinamento-IA.txt}\footnote{Disponível em \url{https://github.com/CalebeMiranda/Pipeline-training/tree/main/AVR}}.
+
+Outro resultado deste trabalho é a análise comparativa entre as sequências do Faustino e as flags padrão, presente na \hyperref[fig:Comparação Otimização Faustino vs Padrão]{Figura~\ref*{fig:Comparação Otimização Faustino vs Padrão}}, 
+que mostra uma vantagem significativa das sequências especializadas em relação à flag padrão \texttt{-Oz}, com \textit{52,1\%} dos 1803 casos apresentandos demonstrando redução de tamanho de código em relação 
+à \texttt{-Oz}, \textit{47,9\%} dos casos apresentando resultados equivalentes e apenas \textit{0,1\%} dos casos apresentando piora em relação à \texttt{-Oz}. 
+Este resultado, corrobora com a relevância de usar conjuntos de sequências especializados como ponto de partida para a construção de pares de treinamento e é disponibilizada como material de apoio ao presente trabalho.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Imagens/Gráfico-comparativo.png}
+    \caption[Comparação de Otimização]{Comparação de Otimização. Fonte: \url{https://github.com/CalebeMiranda/Pipeline-training/tree/main/AVR}(Elaboração Própria).}
+    \label{fig:Comparação Otimização Faustino vs Padrão}
+\end{figure}
+
+Vale a pena mencionar, que esta pesquisa, elaborada em conjunto com outro trabalho de tema semelhante, obteve um modelo refinado para a família de MCUs
+Stm32\footnote{Disponível em \url{https://huggingface.co/Cal-mfbc5446/LlmCompiler-Stm32FineTunningFinal}}, cujo pipeline de geração de dados e configuração de treinamento seguiu uma metodologia semelhante à descrita neste trabalho. O modelo refinado é capaz de sugerir sequências de passes compatíveis com
+aquelas observadas no treinamento, porém após realizado testes de inferência o modelo apresentou um comportamento de sucesso esporádico, retornando padrões de otimização previamente
+observados somente para alguns códigos provenientes do conjunto de treinamento do AnghaBench. Portanto, esse comportamento inconsistente não é suficiente para considerar esse resultado como conclusivo,
+porém é um indicativo positivo de que o método empregado em ambos trabalhos é viável e pode ser aprimorado em trabalhos futuros, visto que o tamanho reduzido do conjunto de treinamento e as limitações de tempo, também foram os principais
+problemas encontrados no refinamento deste modelo de IA. 
+
+Portanto, o principal resultado deste trabalho é a implementação de um pipeline reprodutível e público que cobre 
+todo o processo:
+\begin{itemize}
+    \item Geração e seleção de programas em C
+    \item Conversão automatizada para ROBL
+    \item Compilação com listas exaustivas de passes (1.289 sequências únicas) e comparação com flags padrão
+    \item Coleta das melhores sequências e montagem dos pares \textit{prompt}/\textit{label}
+    \item Preparação do ambiente de fine-tuning
+\end{itemize}

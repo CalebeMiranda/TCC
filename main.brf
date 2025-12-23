@@ -15,7 +15,7 @@
 \backcite {cummins2023large}{{13}{1.2}{section.1.2}}
 \backcite {cooper2012engineering}{{15}{2.1}{section.2.1}}
 \backcite {fischer2010crafting}{{15}{2.1}{section.2.1}}
-\backcite {aho1995compiladores}{{16}{1}{figure.caption.7}}
+\backcite {aho1995compiladores}{{16}{1}{figure.caption.4}}
 \backcite {cooper2012engineering}{{16}{2.1.1}{subsection.2.1.1}}
 \backcite {cooper2012engineering}{{17}{2.1.1}{subsection.2.1.1}}
 \backcite {cooper2012engineering}{{17}{2.1.2}{subsection.2.1.2}}
@@ -47,16 +47,16 @@
 \backcite {fischer2010crafting}{{22}{2.1.7}{subsection.2.1.7}}
 \backcite {white2024making}{{22}{2.2}{section.2.2}}
 \backcite {hussain2016programming}{{22}{2.2}{section.2.2}}
-\backcite {white2024making}{{22}{2.2}{section.2.2}}
-\backcite {atmel2015}{{22}{2.2}{section.2.2}}
-\backcite {white2024making}{{23}{2.2}{figure.caption.10}}
-\backcite {white2024making}{{23}{2.2}{figure.caption.10}}
+\backcite {white2024making}{{23}{2.2}{section.2.2}}
+\backcite {atmel2015}{{23}{2.2}{section.2.2}}
+\backcite {white2024making}{{23}{2.2}{figure.caption.7}}
+\backcite {white2024making}{{23}{2.2}{figure.caption.7}}
 \backcite {mernik2005and}{{23}{2.2.1}{subsection.2.2.1}}
 \backcite {mernik2005and}{{23}{2.2.1}{subsection.2.2.1}}
 \backcite {mernik2005and}{{23}{2.2.1}{subsection.2.2.1}}
 \backcite {white2024making}{{24}{2.2.1}{subsection.2.2.1}}
 \backcite {oliveira2024}{{24}{2.2.2}{subsection.2.2.2}}
-\backcite {russell2020artificial}{{24}{2.3}{section.2.3}}
+\backcite {russell2020artificial}{{25}{2.3}{section.2.3}}
 \backcite {morandin2022artificial, boden2017inteligencia}{{25}{2.3}{section.2.3}}
 \backcite {morandin2022artificial, boden2017inteligencia}{{25}{2.3}{section.2.3}}
 \backcite {morandin2022artificial}{{25}{2.3}{section.2.3}}
@@ -73,14 +73,14 @@
 \backcite {russell2020artificial, ludermir}{{26}{2.3.1}{subsection.2.3.1}}
 \backcite {russell2020artificial}{{26}{2.3.1}{subsection.2.3.1}}
 \backcite {russell2020artificial}{{26}{2.3.2}{subsection.2.3.2}}
-\backcite {muhammad2015supervised}{{26}{2.3.2}{subsection.2.3.2}}
+\backcite {muhammad2015supervised}{{27}{2.3.2}{subsection.2.3.2}}
 \backcite {russell2020artificial}{{27}{2.3.2}{subsection.2.3.2}}
 \backcite {chang2024survey}{{28}{2.3.3}{subsection.2.3.3}}
 \backcite {zhao2024explainability}{{28}{2.3.3}{subsection.2.3.3}}
 \backcite {vaswani2017attention, chang2024survey}{{28}{2.3.3}{subsection.2.3.3}}
 \backcite {vaswani2017attention, chang2024survey}{{28}{2.3.3}{subsection.2.3.3}}
-\backcite {cooper2012engineering, fischer2010crafting}{{28}{2.4}{section.2.4}}
-\backcite {cooper2012engineering, fischer2010crafting}{{28}{2.4}{section.2.4}}
+\backcite {cooper2012engineering, fischer2010crafting}{{29}{2.4}{section.2.4}}
+\backcite {cooper2012engineering, fischer2010crafting}{{29}{2.4}{section.2.4}}
 \backcite {lattner2004llvm}{{29}{2.4}{section.2.4}}
 \backcite {wang2018machine}{{29}{2.4}{section.2.4}}
 \backcite {cummins2023large}{{29}{2.4}{section.2.4}}
@@ -96,16 +96,19 @@
 \backcite {faustino2021new}{{32}{3.3.3}{subsection.3.3.3}}
 \backcite {PuriniJain2013}{{32}{3.3.3}{subsection.3.3.3}}
 \backcite {faustino2021new}{{32}{3.3.3}{subsection.3.3.3}}
-\backcite {yang2011finding}{{33}{4.2.0.1}{subsubsection.4.2.0.1}}
-\backcite {da2021anghabench}{{34}{4.2.1}{subsection.4.2.1}}
-\backcite {faustino2021new}{{35}{4.4}{section.4.4}}
-\backcite {cummins2023large}{{37}{4.5}{section.4.5}}
-\backcite {cummins2023large}{{37}{4.5}{section.4.5}}
-\backcite {cummins2023large}{{38}{4.6}{section.4.6}}
+\backcite {PuriniJain2013}{{33}{3.3.3}{subsection.3.3.3}}
+\backcite {faustino2021new}{{33}{3.3.3}{subsection.3.3.3}}
+\backcite {cummins2023large}{{33}{3.3.3}{subsection.3.3.3}}
+\backcite {yang2011finding}{{34}{4.2.0.1}{subsubsection.4.2.0.1}}
+\backcite {da2021anghabench}{{35}{4.2.1}{subsection.4.2.1}}
+\backcite {faustino2021new}{{36}{4.4}{section.4.4}}
+\backcite {cummins2023large}{{38}{4.5}{section.4.5}}
+\backcite {cummins2023large}{{38}{4.5}{section.4.5}}
 \backcite {cummins2023large}{{39}{4.6}{section.4.6}}
-\backcite {faustino2021new}{{40}{5}{chapter.5}}
-\backcite {faustino2021new}{{40}{5}{chapter.5}}
-\backcite {faustino2021new}{{40}{5}{chapter.5}}
-\backcite {faustino2021new}{{44}{6}{chapter.6}}
-\backcite {faustino2021new}{{44}{6}{chapter.6}}
-\backcite {faustino2021new}{{46}{7}{chapter.7}}
+\backcite {cummins2023large}{{40}{4.6}{section.4.6}}
+\backcite {faustino2021new}{{41}{5}{chapter.5}}
+\backcite {faustino2021new}{{41}{5}{chapter.5}}
+\backcite {faustino2021new}{{41}{5}{chapter.5}}
+\backcite {faustino2021new}{{45}{6}{chapter.6}}
+\backcite {faustino2021new}{{45}{6}{chapter.6}}
+\backcite {faustino2021new}{{47}{7}{chapter.7}}

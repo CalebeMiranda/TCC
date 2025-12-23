@@ -1,0 +1,109 @@
+\section{Motivação}
+
+Modelos de Inteligência Artificial (IA) têm sido amplamente utilizados em diversas tarefas no contexto da ciência da computação. 
+Nos últimos anos, os avanços em Modelos de Linguagem de Grande Escala ou LLMs (\textit{Large Language Models}) tornaram possível 
+aplicar IA em atividades antes consideradas exclusivamente humanas, como geração de código, edição de projetos, sugestão e análise 
+de codificação e, mais recentemente, otimização de código para compiladores. 
+
+Seria possível um modelo de linguagem treinado com exemplos de código de fases intermediárias do compilador substituir ou melhorar 
+as estratégias de otimização empregadas por compiladores tradicionais? \citeonline{cummins2023large} partiram desta pergunta fundamental 
+e treinaram um modelo baseado na arquitetura LLaMA 2\footnote{Site da Meta Llama 2: \url{https://www.llama.com/llama2/}} com 7 bilhões 
+de parâmetros, alimentado por uma base de dados de funções LLVM-IR\footnote{Site do manual de referência da linguagem: \url{https://llvm.org/docs/LangRef.html}}, ou seja, 
+códigos de linguagem intermediária gerados normalmente após a análise semântica de um compilador, não otimizados, associados a 
+boas sequências de passes de otimização obtidas por busca semi-exaustiva (\textit{autotuning}), além dos respectivos códigos otimizados. 
+O principal objetivo era avaliar a possibilidade de um modelo de IA gerar a sequência correta de passes de otimização que diminuiria o 
+tamanho do código binário resultante. O modelo treinado, chamado LLM-Compiler, foi capaz de gerar listas de passes de otimização que 
+superaram as obtidas por estratégias como -Oz do LLVM, com uma média de melhoria de 3\% a 5\% na contagem de instruções, sem a necessidade 
+de realizar múltiplas compilações como ocorre nos métodos tradicionais de \textit{autotuning}. Além disso, ao ser perguntado sobre qual seria 
+o código otimizado resultante da aplicação dos passes de otimização, o modelo demonstrou capacidade de raciocínio sobre código, atingindo 
+mais de 90\% de sucesso na geração de código compilável e uma taxa de equivalência exata de 70\% com o código gerado pelo compilador usando 
+os mesmos passes.
+
+Os resultados de \citeonline{cummins2023large} se mostram promissores, visto que a \textit{flag} -Oz é uma \textit{flag} de otimização 
+utilizada em diversos compiladores atuais como, por exemplo, Clang (que usa o \textit{backend} LLVM), com o objetivo específico 
+de gerar o menor tamanho de código binário possível durante a compilação. Existem outras \textit{flags} comumente utilizadas 
+como -Os, -O1, -O2 e -O3, sendo o -Os uma \textit{flag} de otimização que tenta reduzir o tamanho do código sem comprometer muito 
+a performance, e as \textit{flags} de otimização de execução -O1, -O2 e -O3, que otimizam para uma velocidade boa, intermediária e 
+rápida de execução de código, respectivamente, porém, também aumentam o tamanho do código binário produzido e tornam o processo de 
+compilação proporcionalmente mais lento. Como mostrado por \citeonline{wang2018machine}, as \textit{flags} de otimização tradicionais 
+apresentam limitações. Os autores destacam que essas configurações genéricas muitas vezes não oferecem o melhor desempenho possível 
+para todos os programas ou arquiteturas devido ao fato de aplicarem um conjunto fixo de transformações, sem considerar as características 
+específicas do código-fonte ou do hardware de destino. Segundo \citeonline{wang2018machine}, técnicas de aprendizado de máquina permitirão 
+a seleção e ordenação dinâmica de passes de otimização com base em características específicas do código fonte e do ambiente de execução, 
+personalizando o processo de compilação e maximizando ainda mais o desempenho. Sendo assim, é possível perceber que essa tecnologia é promissora e útil.
+
+Atualmente, grande parte dos equipamentos de tecnologia em nossas residências e empresas compartilham uma característica em comum: em 
+alguma instância, fazem uso de sistemas embarcados. Presentes em automóveis, telefones, impressoras, sensores, equipamentos médicos e 
+uma infinidade de outros dispositivos eletrônicos essenciais para a indústria, comunicação, pesquisa e funcionamento de uma nação, 
+sistemas embarcados são pequenos sistemas computacionais desenvolvidos para realizar uma tarefa específica, desde ligar um ar condicionado 
+até auxiliar o controle de um drone \cite{Li2003RealTime}. O cerne de um sistema embarcado são os microcontroladores ou MCUs (\textit{Microcontroller Units}). 
+Microcontroladores são circuitos integrados que compõem o ``cérebro'' de sistemas embarcados. Uma MCU possui uma 
+CPU (\textit{Central Processing Unit}), uma memória RAM (\textit{Random Access Memory}), alguma forma de memória de longo prazo ou 
+ROM (\textit{Read-Only Memory}) e métodos de entrada e saída \cite{hussain2016programming}.
+
+Segundo \citeonline{Li2003RealTime}, microcontroladores desempenham um papel fundamental no funcionamento da sociedade atual e o 
+mundo de hoje não funcionaria sem os \textit{softwares} embarcados em nossos aparelhos. Logo, qualquer processo de otimização no 
+funcionamento de MCUs e, consequentemente, de sistemas embarcados, resultaria em um enorme ganho para toda a sociedade. Porém, 
+devido à sua natureza de atuação específica, as MCUs são extremamente restritas em relação ao poder de processamento e armazenamento de 
+dados e necessitam de soluções eficientes de otimização de código \cite{wang2018machine}.
+
+O LLM-Compiler, desenvolvido por \cite{cummins2023large}, embora seja uma solução promissora para atender os requisitos de 
+otimização de código em geral, foi projetado e treinado no domínio de sistemas computacionais comuns, ou seja, para otimizar 
+código para CPUs convencionais de 64 bits, X86\_64 e AArch64. Tais CPUs possuem um nível de capacidade computacional elevado comparado 
+com microcontroladores. Por exemplo, a CPU Intel Core i9-10900K que implementa uma arquitetura de 64 bits, com diversas extensões ao 
+conjunto de instruções, como Intel SSE4.1, Intel SSE4.2 e Intel AVX2, possui uma memória cache de 20 MB e suporta memória RAM DDR4 de até 128 GB, 
+com uma frequência base de \textit{clock} de 3.70 GHz \cite{Intel_i9_10900K_Specs}. Em comparação, arquiteturas como a AVR RISC de 8 bits, 
+foco de atuação deste trabalho, presente em microcontroladores como o ATmega328P, possuem características extremamente limitadas, como 32 KB de 
+memória \textit{flash} programável, 2 KB de SRAM interna, e um \textit{clock} máximo de 16 MHz \cite{atmel2015}. Sendo assim, levando em consideração a 
+utilidade de sistemas embarcados, que utilizam MCUs, e também os resultados otimistas produzidos pelo trabalho de \citeonline{cummins2023large}, surge a 
+necessidade de se adaptar o LLM-Compiler para suprir a demanda por otimização de \textit{software} em microcontroladores de sistemas embarcados.
+
+Considerando estas demandas, o projeto \textit{Robotics Language:} Uma Linguagem de Programação de Propósito Específico para 
+Microcontroladores (PI05974-2024), desenvolvido na Universidade Federal de Jataí, assim como seu antecessor, Especificação e 
+Construção de Protótipos Funcionais de Kits Robóticos de Baixo Custo para uso em Processos de Ensino-Aprendizagem (PI02361-2018), 
+tem como objetivo desenvolver uma linguagem de programação, chamada \textit{The Robotics Language} (ROBL), e seu compilador, 
+denominado Robcmp, específica para robótica e microcontroladores.
+
+Para o exercício deste trabalho, a capacidade do Robcmp de abstrair aspectos específicos do \textit{hardware} e permitir um 
+desenvolvimento compatível com diversos microcontroladores de forma dinâmica e sua integração com o \textit{backend} AVR do 
+LLVM \cite{oliveira2024}, o torna a linguagem ideal para servir como ferramenta de conversão e compilação do conjunto de códigos 
+de entrada e das respostas na saída do modelo.
+
+\section{Objetivo do Trabalho}
+Diante desse cenário, o presente trabalho teve como objetivo elaborar um conjunto de ferramentas, códigos e materiais necessários para realizar o refinamento do modelo LLM-Compiler \cite{cummins2023large}, 
+e possibilitar a aplicação futura de um treinamento adicional com programas e otimizações no domínio de microcontroladores, especificamente a 
+plataforma alvo AVR do LLVM. 
+
+Nossa proposta envolveu a formação de uma base de dados específica, composta por códigos de representação intermediária (IR), extraídos durante o processo de compilação na linguagem ROBL.
+Estes códigos, previamente convertidos da linguagem C, juntamente com suas respectivas listas de passes ótimos de compilação, obtidas através de estratégias semi-exaustivas, são a base
+necessária para a elaboração de um \textit{dataset} dedicado ao refinamento supervisionado do modelo de \cite{cummins2023large}. 
+Nossa hipótese é que o refinamento permita que o modelo de IA seja capaz de compreender a estrutura e as 
+restrições dos códigos voltados para MCUs AVR e, a partir disso, conseguir sugerir listas personalizadas de passes de compilação. 
+
+Os objetivos específicos deste trabalho foram:
+\begin{enumerate}
+    \item Construir uma base de dados contendo códigos em C e posteriormente convertê-los para ROBL;
+    \item Compilar essa base de dados utilizando Robcmp para códigos IR específicos para Atmega328p;
+    \item Encontrar os passes ótimos de instruções para cada código IR;
+    \item Elaborar sequências de \textit{prompt/label} utilizando o IR não otimizado e os passes ótimos encontrados, suficientemente para formar um dataset expressivo;
+    %\item Realizar o \textit{fine-tuning} do modelo LLM-Compiler com esse dataset;
+    %\item Avaliar a performance do modelo ajustado na geração de listas de passes para novos códigos não vistos durante o treinamento;
+    %\item Comparar os resultados obtidos com as estratégias tradicionais de compilação, como -Oz, verificando ganhos em tamanho de código, contagem de instruções e desempenho.
+\end{enumerate}
+
+\section{Contribuição do Trabalho}
+
+Este trabalho contribui com a criação, elaboração e disponibilização de um pipeline completo para o treinamento e refinamento do 
+LLM-Compiler no domínio de microcontroladores AVR. A contribuição inclui, de forma organizada e reprodutível:
+
+\begin{itemize}
+    \item O desenvolvimento e documentação de um fluxo (pipeline) automatizado para geração, conversão e preparação de datasets compatíveis com o modelo (incluindo o conversor \texttt{c2rob} e os scripts de processamento);
+    \item A construção e curadoria de datasets prontos, com códigos convertidos para ROBL, pares \textit{prompt/label} adequados para treinamento supervisionado e metadados que permitam reproduzir experimentos;
+    \item A disponibilização das ferramentas e artefatos necessários ao processo de refinamento (scripts de autotuning e mecanismos de validação e configuração para execução do fine-tuning na plataforma Hugging Face).
+\end{itemize}
+
+A contribuição dessa pesquisa foi definida como o desenvolvimento do processo completo e reprodutível que permite o refinamento: ou seja, todo o conjunto de 
+métodos, datasets e ferramentas necessários para, posteriormente, executar o fine-tuning do LLM-Compiler no domínio AVR, bem como avaliar 
+seus resultados. Assim, o mérito científico e prático deste trabalho reside na preparação e disponibilização de um pipeline robusto e pronto 
+para ser usado no refinamento do modelo, reduzindo significativamente a barreira de entrada para futuras execuções experimentais e permitindo 
+que trabalhos subsequentes concluam o fine-tuning de maneira reprodutível e eficiente.

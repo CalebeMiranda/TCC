@@ -1,0 +1,117 @@
+\section{Introdução}
+
+Este capítulo apresenta uma revisão acerca dos principais trabalhos
+relacionados ao tema desta pesquisa, com foco nas áreas de otimização de tamanho de código, 
+busca de sequências de passes de compilação e, em especial, técnicas envolvendo modelos de linguagem de larga escala. 
+O objetivo é contextualizar o refinamento do modelo LLM-Compiler para o domínio de microcontroladores AVR dentro do escopo da
+Robotics Language (ROBL), destacando contribuições, limitações e relações diretas com este estudo.
+
+Inicialmente, são apresentados os critérios adotados para seleção dos trabalhos.
+Em seguida, são descritas as obras consideradas mais relevantes, discutindo suas
+metodologias, resultados e pertinência para o desenvolvimento desta pesquisa.
+
+\section{Metodologia de Análise}
+
+A análise dos trabalhos relacionados seguiu uma abordagem de Revisão Narrativa
+de Literatura (RNL), com busca realizada para quaisquer trabalhos que de forma direta ou indiretamente
+abordaram otimização de tamanho de código, associados ao ambiente LLVM. A seleção dos materiais
+também considerou referências citadas no próprio trabalho original do LLM-Compiler,
+em especial pesquisas que envolvem:
+
+\begin{itemize}
+    \item \textbf{Modelos de IA aplicados à otimização de compiladores};
+    \item \textbf{Métodos de busca e seleção de passes de otimização} para redução de tamanho de código;
+    \item \textbf{Ferramentas tradicionais de autotuning} como YaCoS;
+    \item \textbf{Redução sistemática de sequências de passes};
+    \item \textbf{Construção de datasets} baseados em representações intermediárias;
+\end{itemize}
+
+\section{Trabalhos Analisados}
+
+Com base nos critérios definidos, três trabalhos foram considerados fundamentais
+para o desenvolvimento desta pesquisa, por suas contribuições conceituais e práticas 
+no problema de otimização de código e seleção de passes de compilação. As subseções a seguir
+apresentam um resumo estruturado de cada obra, destacando suas contribuições e sua
+relação direta com a estrutura desta pesquisa e seu impacto em um 
+futuro refinamento do modelo LLM-Compiler para o domínio AVR.
+
+\subsection{LLM-Compiler}
+
+O artigo de \citeonline{cummins2023large} introduz o LLM-Compiler, a primeira aplicação extensiva de Large Language Models ao 
+problema de ordenação de passes do LLVM com objetivo de redução de tamanho de código. Os autores treinam um modelo, utilizando a biblioteca transformers, 
+com 7 bilhões de parâmetros e arquitetura LLaMA-2 a partir do zero, usando um conjunto de 1 milhão de funções LLVM-IR, 
+e estabeleceram que além de prever a lista de passes, o modelo também aprende a predizer a contagem 
+de instruções antes e depois de gerar o IR otimizado como tarefa auxiliar. 
+
+De forma prática, os autores constroem um padrão de sequências via autotuning (busca extensiva e algoritmo de minimização das sequências), 
+e usam esse padrão como label supervisionado para treinar o LLM. O treinamento envolveu aproximadamente 15.7 bilhões de tokens e 620 dias de GPU, como 
+referência, o autotuner alcançava ganhos maiores (5\%) mas à custa de bilhões de compilações adicionais, enquanto o LLM atingiu 
+um ganho prático de 3\% sobre a flag \texttt{-Oz} sem invocar o compilador em inferência. Complementarmente, o modelo produz 
+código compilável em 90\% dos casos e acerta o IR final caractere por caractere em cerca de 70\%, evidenciando capacidade real de 
+raciocínio sobre transformações de compilador. 
+
+Para este trabalho, \citeonline{cummins2023large} fornecem o fundamento conceitual e base prática (o próprio LLM-Compiler). Os autores provaram que LLMs podem aprender 
+lógicas de otimização e substituir buscas ineficientes por predições eficientes. Sua pesquisa, porém, foi elaborada para arquiteturas 
+de propósito geral e com janelas de contexto e datasets dimensionados para esse tipo de CPU. Este presente trabalho, aproveita essa abordagem 
+mas a adaptada ao domínio de MCU AVR (em particular ATmega328P), enfrentando desafios diferentes, como severas restrições de memória, conjunto de instruções 
+reduzido, necessidade de converter e mapear passes entre versões do LLVM e limites de tempo, por isso, a maior contribuição da pesquisa de \citeonline{cummins2023large} 
+para este trabalho é a base teórica e demonstração prática que inspirou a necessidade da atual pesquisa.
+
+\subsection{Good Optimization Sequences Covering Program Space}
+
+O trabalho de \citeonline{PuriniJain2013} propõe um método para identificar sequências de
+otimização que cobrem eficientemente o espaço de programas, reduzindo a necessidade de
+testes exaustivos em todos os códigos de entrada. A abordagem utiliza remoção iterativa
+e análise de impacto dos passes, permitindo identificar sequências curtas, porém eficazes,
+na redução de tamanho e melhoria de desempenho.
+
+Esta pesquisa é fundamental para o presente trabalho, pois seu método de redução
+de sequências é utilizado diretamente no processo de filtragem das listas geradas pelo
+autotuning descrito por \citeonline{faustino2021new} e utilizado na lista \textit{Optimization Cache}. Assim, sua
+contribuição teórica fornece a base para garantir que somente os passes essenciais sejam mantidos nas listas que farão
+parte do dataset final.
+
+\subsection{Optimization Sequences for Code-Size Reduction}
+
+O trabalho de \citeonline{faustino2021new} apresenta um método sistemático para encontrar
+sequências de otimização voltadas especificamente à redução de tamanho de código no
+LLVM. Os autores realizaram um estudo em grande escala, compilando 15\,000
+programas com 10\,044 sequências distintas geradas e avaliadas, usando um algoritmo genético (via YaCoS) para produzir um
+conjunto inicial de candidatas, seguido da aplicação do algoritmo de redução de \citeonline{PuriniJain2013} para eliminar passes redundantes.
+Desse processo emergiram cinco sequências curtas (12–15 transformações) que, em vários benchmarks,
+chegaram a produzir binários menores que as flags padrão do LLVM e reduziram o tempo de compilação em relação a \texttt{-Os}/\texttt{-Oz}.
+Essas realizações estão detalhadas no estudo e servem como demonstração prática de que sequências bem escolhidas e compactas
+podem chegar perto, e em alguns casos superar, as configurações padrão, com ganho também em tempo de compilação.
+
+Do ponto de vista metodológico, o trabalho organiza critérios úteis para selecionar e avaliar sequências: a construção da matriz 
+programa sequência (\textit{optimization matrix}), medidas como "\textit{best frequency}", "\textit{good in bounds}", "\textit{total size}", "\textit{geometric relative size}" e "\textit{best 
+maximum relative size}". Essas ferramentas permitem quantificar não apenas qual sequência é “melhor” para um 
+programa isolado, mas também analisar robustez e diversidade de comportamento sobre um corpus extenso. Além disso, os resultados mostram 
+que as novas sequências tendem a ser muito mais curtas que \texttt{-Os}/\texttt{-Oz} (média aproximadamente 40 a 79 passes nas propostas 
+versus 260 nas flags), o que explica ganhos substanciais em tempo de compilação e qualidade ou compacidade em muitos casos. 
+
+Para o presente TCC, a influência do trabalho de \citeonline{faustino2021new} é direta e prática: adoptamos a \textit{Optimization Cache} como fonte principal
+de sequências candidatas e como ponto de partida para a busca da melhor sequência por programa. A abordagem deles justificou tanto a
+escolha de testar um conjunto finito e criterioso de sequências (em vez de tentar uma busca exponencial) quanto a
+aplicação do processo de redução e filtragem para obter sequências compactas e reprodutíveis, mostrando que o método deles abrange um caminho aplicável,
+embora exija mudanças adicionais para domínios com restrições severas de recursos.
+
+
+A \hyperref[fig:comparativo_trabalhos]{Figura~\ref*{fig:comparativo_trabalhos}} apresenta uma comparação entre trabalhos relacionados e o presente trabalho, 
+considerando cinco critérios centrais: atuação explícita em microcontroladores (MCUs), uso de modelos de inteligência 
+artificial, uso específico de Large Language Models (LLMs), aplicação de técnicas de \textit{fine-tuning} e objetivo 
+explícito de otimização de código visando redução de tamanho. Observa-se que os trabalhos de \cite{PuriniJain2013} não atendem a 
+nenhum dos critérios avaliados, enquanto o trabalho de \cite{faustino2021new} foca exclusivamente na otimização por tamanho, sem empregar 
+modelos de IA. O trabalho de \cite{cummins2023large} representa um avanço significativo ao empregar LLMs com adaptação por 
+\textit{fine-tuning} para sugerir sequências de passes de compilação, explorando padrões sintáticos e semânticos do 
+LLVM-IR, porém sem direcionamento específico ao domínio de MCUs. Em contraste, o presente trabalho é o único que contempla simultaneamente 
+todos os critérios analisados, ao aplicar LLMs ajustados por \textit{fine-tuning} em um contexto específico de 
+microcontroladores, com foco explícito na redução do tamanho de código, evidenciando assim uma contribuição inédita e o 
+preenchimento de uma lacuna existente na literatura.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Imagens/Tabela Comparativa .png}
+    \caption[Comparação entre trabalhos relacionados]{Comparação entre trabalhos relacionados e o presente trabalho.}
+    \label{fig:comparativo_trabalhos}
+\end{figure}
